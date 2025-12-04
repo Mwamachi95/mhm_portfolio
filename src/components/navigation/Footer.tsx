@@ -6,11 +6,10 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full min-h-screen bg-[#304544] flex items-end">
-      <div className="w-full px-4 pb-12 sm:pb-16 md:pb-20 pt-12 sm:pt-14 md:pt-16">
-        <div className="inline-block">
-          {/* Two Columns: Contact and Social Media */}
-          <div className="flex flex-col sm:flex-row gap-8 sm:gap-12 md:gap-16 lg:gap-20">
+    <footer className="w-full min-h-screen bg-[#304544] flex items-end px-4 sm:px-6 md:px-8 pb-12 sm:pb-16 md:pb-20 pt-12 sm:pt-14 md:pt-16">
+      <div className="w-full max-w-fit">
+        {/* Two Columns: Contact and Social Media */}
+        <div className="flex flex-col sm:flex-row gap-8 sm:gap-12 md:gap-16 lg:gap-20">
             {/* Column 1 - Contact */}
             <div className="space-y-2 sm:space-y-3 md:space-y-4">
               <h3 className="text-[#C0D5CE] text-sm sm:text-base md:text-lg lg:text-xl font-bold uppercase tracking-wide">
@@ -54,8 +53,8 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Logo */}
-          <div className="mt-6 sm:mt-8 md:mt-10">
+        {/* Logo */}
+        <div className="mt-6 sm:mt-8 md:mt-10">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 612 237.59"
@@ -73,12 +72,11 @@ export function Footer() {
               <path d="M578.06 101.83v.34l-.35-.34z" />
               <path d="M408.35 135.77v101.82h-33.94V135.77h-33.94v101.82h-33.95V33.94h-33.94V0h33.94l33.95 33.94v67.89h33.94z" />
             </svg>
-          </div>
+        </div>
 
-          {/* Copyright */}
-          <div className="mt-4 sm:mt-5 md:mt-6">
-            <p className="text-[#C0D5CE] text-xs sm:text-sm">© {currentYear} Mwamachi</p>
-          </div>
+        {/* Copyright */}
+        <div className="mt-4 sm:mt-5 md:mt-6">
+          <p className="text-[#C0D5CE] text-xs sm:text-sm">© {currentYear} Mwamachi</p>
         </div>
       </div>
     </footer>

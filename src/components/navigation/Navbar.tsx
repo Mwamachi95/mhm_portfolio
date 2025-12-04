@@ -1,10 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const Logo = () => {
+interface LogoProps {
+  color: string;
+}
+
+const Logo = ({ color }: LogoProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -17,24 +21,23 @@ const Logo = () => {
         <motion.svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 612 237.59"
-          className="w-16 sm:w-20 md:w-24 h-auto text-[#507579]"
-          fill="currentColor"
+          className="w-16 sm:w-20 md:w-24 h-auto"
           animate={{ y: isHovered ? -8 : 0 }}
           transition={{
             duration: 0.4,
             ease: [0.25, 0.46, 0.45, 0.94],
           }}
         >
-          <path d="M306.52 203.65v33.94H169.36V135.77h-33.59v-33.95h33.59l.35.35 33.59 33.6.23 67.88z" />
-          <path d="M101.48 237.59V135.77h-33.6v-33.94h33.6l33.94 33.94.35 101.82z" />
-          <path d="M33.59 237.59V135.77H0v-33.94h33.59l33.94 33.94.35 101.82z" />
-          <path d="M169.71 101.82v.35l-.35-.35z" />
-          <path d="M577.71 237.59V135.77h-33.59v-33.94h33.59l33.94 33.94.35 101.82z" />
-          <path d="M476.23 101.82h33.6v33.95h-33.6z" />
-          <path d="M544.12 237.59h-34.29V101.82l33.94 33.95z" />
-          <path d="M441.94 237.59V135.77h-33.59v-33.94h33.59l33.94 33.94.35 101.82z" />
-          <path d="M578.06 101.83v.34l-.35-.34z" />
-          <path d="M408.35 135.77v101.82h-33.94V135.77h-33.94v101.82h-33.95V33.94h-33.94V0h33.94l33.95 33.94v67.89h33.94z" />
+          <path d="M306.52 203.65v33.94H169.36V135.77h-33.59v-33.95h33.59l.35.35 33.59 33.6.23 67.88z" fill={color} style={{ transition: 'fill 0.3s ease' }} />
+          <path d="M101.48 237.59V135.77h-33.6v-33.94h33.6l33.94 33.94.35 101.82z" fill={color} style={{ transition: 'fill 0.3s ease' }} />
+          <path d="M33.59 237.59V135.77H0v-33.94h33.59l33.94 33.94.35 101.82z" fill={color} style={{ transition: 'fill 0.3s ease' }} />
+          <path d="M169.71 101.82v.35l-.35-.35z" fill={color} style={{ transition: 'fill 0.3s ease' }} />
+          <path d="M577.71 237.59V135.77h-33.59v-33.94h33.59l33.94 33.94.35 101.82z" fill={color} style={{ transition: 'fill 0.3s ease' }} />
+          <path d="M476.23 101.82h33.6v33.95h-33.6z" fill={color} style={{ transition: 'fill 0.3s ease' }} />
+          <path d="M544.12 237.59h-34.29V101.82l33.94 33.95z" fill={color} style={{ transition: 'fill 0.3s ease' }} />
+          <path d="M441.94 237.59V135.77h-33.59v-33.94h33.59l33.94 33.94.35 101.82z" fill={color} style={{ transition: 'fill 0.3s ease' }} />
+          <path d="M578.06 101.83v.34l-.35-.34z" fill={color} style={{ transition: 'fill 0.3s ease' }} />
+          <path d="M408.35 135.77v101.82h-33.94V135.77h-33.94v101.82h-33.95V33.94h-33.94V0h33.94l33.95 33.94v67.89h33.94z" fill={color} style={{ transition: 'fill 0.3s ease' }} />
         </motion.svg>
 
         {/* Mwamachi text and underline */}
@@ -49,8 +52,8 @@ const Logo = () => {
               duration: 0.4,
               ease: [0.25, 0.46, 0.45, 0.94],
             }}
-            className="text-[#507579] text-xs sm:text-sm font-bold whitespace-nowrap lowercase w-full"
-            style={{ letterSpacing: '0.26em' }}
+            className="text-xs sm:text-sm font-bold whitespace-nowrap lowercase w-full"
+            style={{ letterSpacing: '0.26em', color, transition: 'color 0.3s ease' }}
           >
             Mwamachi
             <motion.div
@@ -60,7 +63,8 @@ const Logo = () => {
                 duration: 0.4,
                 ease: [0.25, 0.46, 0.45, 0.94],
               }}
-              className="h-[1px] bg-[#507579] mt-1"
+              className="h-[1px] mt-1"
+              style={{ backgroundColor: color, transition: 'background-color 0.3s ease' }}
             />
           </motion.div>
         </div>
@@ -72,6 +76,10 @@ const Logo = () => {
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+  const [navColor, setNavColor] = useState('#507579');
+  const [aboutColor, setAboutColor] = useState('#507579');
+  const [isNavOverFooter, setIsNavOverFooter] = useState(false);
+  const [isAboutOverFooter, setIsAboutOverFooter] = useState(false);
 
   const navLinks = [
     { name: 'Websites', href: '/websites' },
@@ -81,16 +89,82 @@ export function Navbar() {
     { name: 'Contact', href: '/contact' },
   ];
 
+  // Handle menu open/close color changes for top navbar
+  useEffect(() => {
+    if (isMenuOpen) {
+      setNavColor('#1B3033');
+    } else if (isNavOverFooter) {
+      setNavColor('#C0D5CE');
+    } else {
+      setNavColor('#507579');
+    }
+  }, [isMenuOpen, isNavOverFooter]);
+
+  // Handle color changes for About link (bottom-right)
+  useEffect(() => {
+    if (isMenuOpen) {
+      setAboutColor('#1B3033');
+    } else if (isAboutOverFooter) {
+      setAboutColor('#C0D5CE');
+    } else {
+      setAboutColor('#507579');
+    }
+  }, [isMenuOpen, isAboutOverFooter]);
+
+  // Use RAF to continuously check footer position (works with Lenis)
+  useEffect(() => {
+    let rafId: number;
+
+    const checkFooterPosition = () => {
+      const footer = document.querySelector('footer');
+      const aboutLink = document.querySelector('a[href="/about"]');
+
+      if (footer) {
+        const footerRect = footer.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        // Check if top navbar (logo, menu) is over footer
+        // This happens when footer's top edge reaches near the top of viewport
+        if (footerRect.top <= 100) {
+          setIsNavOverFooter(true);
+        } else {
+          setIsNavOverFooter(false);
+        }
+
+        // Check if About link (bottom-right) is over footer
+        // This happens when footer enters the bottom area of viewport
+        if (aboutLink) {
+          const aboutRect = aboutLink.getBoundingClientRect();
+          // Check if footer has reached the About link position
+          if (footerRect.top <= aboutRect.top + aboutRect.height) {
+            setIsAboutOverFooter(true);
+          } else {
+            setIsAboutOverFooter(false);
+          }
+        }
+      }
+
+      rafId = requestAnimationFrame(checkFooterPosition);
+    };
+
+    rafId = requestAnimationFrame(checkFooterPosition);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+    };
+  }, []);
+
   return (
     <>
       {/* Main Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-[60] px-4 py-4 sm:px-6 sm:py-5 md:px-8 md:py-6">
         <div className="flex items-center justify-between">
-          <Logo />
+          <Logo color={navColor} />
 
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-[#507579] text-lg sm:text-xl font-medium hover:opacity-80 transition-opacity"
+            className="text-lg sm:text-xl font-medium hover:opacity-80"
+            style={{ color: navColor, transition: 'color 0.3s ease, opacity 0.3s ease' }}
           >
             {isMenuOpen ? 'Close' : 'Menu'}
           </button>
@@ -165,7 +239,8 @@ export function Navbar() {
       {/* About Link - Fixed Bottom Right */}
       <Link
         href="/about"
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 z-50 text-base sm:text-lg text-[#507579] hover:opacity-80 transition-opacity"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 z-50 text-base sm:text-lg hover:opacity-80"
+        style={{ color: aboutColor, transition: 'color 0.3s ease, opacity 0.3s ease' }}
       >
         About
       </Link>
