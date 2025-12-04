@@ -6,25 +6,25 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full min-h-screen bg-[#304544] flex items-end px-4 sm:px-6 md:px-8 pb-12 sm:pb-16 md:pb-20 pt-12 sm:pt-14 md:pt-16">
+    <footer className="w-full min-h-screen bg-dark-bg flex items-end px-4 sm:px-6 md:px-8 pb-12 sm:pb-16 md:pb-20 pt-12 sm:pt-14 md:pt-16">
       <div className="w-full max-w-fit">
         {/* Two Columns: Contact and Social Media */}
         <div className="flex flex-col sm:flex-row gap-8 sm:gap-12 md:gap-16 lg:gap-20">
             {/* Column 1 - Contact */}
             <div className="space-y-2 sm:space-y-3 md:space-y-4">
-              <h3 className="text-[#C0D5CE] text-sm sm:text-base md:text-lg lg:text-xl font-bold uppercase tracking-wide">
+              <h3 className="font-body text-dark-fg text-sm sm:text-base md:text-lg lg:text-xl font-bold uppercase tracking-wide">
                 Contact
               </h3>
               <div className="space-y-1.5 sm:space-y-2 md:space-y-3">
                 <a
                   href="mailto:mwamachi.mwamburi@gmail.com"
-                  className="block text-[#C0D5CE] text-base sm:text-lg md:text-xl lg:text-2xl font-normal hover:underline decoration-1 underline-offset-4 transition-all duration-300"
+                  className="block font-body text-dark-fg text-base sm:text-lg md:text-xl lg:text-2xl font-normal hover:underline decoration-1 underline-offset-4 transition-all duration-300"
                 >
                   mwamachi.mwamburi@gmail.com
                 </a>
                 <a
                   href="tel:+254712378654"
-                  className="block text-[#C0D5CE] text-base sm:text-lg md:text-xl lg:text-2xl font-normal hover:underline decoration-1 underline-offset-4 transition-all duration-300"
+                  className="block font-body text-dark-fg text-base sm:text-lg md:text-xl lg:text-2xl font-normal hover:underline decoration-1 underline-offset-4 transition-all duration-300"
                 >
                   +254712378654
                 </a>
@@ -33,19 +33,19 @@ export function Footer() {
 
             {/* Column 2 - Social Media */}
             <div className="space-y-2 sm:space-y-3 md:space-y-4">
-              <h3 className="text-[#C0D5CE] text-sm sm:text-base md:text-lg lg:text-xl font-bold uppercase tracking-wide">
+              <h3 className="font-body text-dark-fg text-sm sm:text-base md:text-lg lg:text-xl font-bold uppercase tracking-wide">
                 Social Media
               </h3>
               <div className="space-y-1.5 sm:space-y-2 md:space-y-3">
                 <a
                   href="#"
-                  className="block text-[#C0D5CE] text-base sm:text-lg md:text-xl lg:text-2xl font-normal hover:underline decoration-1 underline-offset-4 transition-all duration-300"
+                  className="block font-body text-dark-fg text-base sm:text-lg md:text-xl lg:text-2xl font-normal hover:underline decoration-1 underline-offset-4 transition-all duration-300"
                 >
                   Instagram
                 </a>
                 <a
                   href="#"
-                  className="block text-[#C0D5CE] text-base sm:text-lg md:text-xl lg:text-2xl font-normal hover:underline decoration-1 underline-offset-4 transition-all duration-300"
+                  className="block font-body text-dark-fg text-base sm:text-lg md:text-xl lg:text-2xl font-normal hover:underline decoration-1 underline-offset-4 transition-all duration-300"
                 >
                   LinkedIn
                 </a>
@@ -58,7 +58,7 @@ export function Footer() {
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 612 237.59"
-              className="w-full h-auto text-[#C0D5CE]"
+              className="w-full h-auto text-dark-fg"
               fill="currentColor"
             >
               <path d="M306.52 203.65v33.94H169.36V135.77h-33.59v-33.95h33.59l.35.35 33.59 33.6.23 67.88z" />
@@ -76,7 +76,7 @@ export function Footer() {
 
         {/* Copyright */}
         <div className="mt-4 sm:mt-5 md:mt-6">
-          <p className="text-[#C0D5CE] text-xs sm:text-sm">© {currentYear} Mwamachi</p>
+          <p className="font-body text-dark-fg text-xs sm:text-sm">© {currentYear} Mwamachi</p>
         </div>
       </div>
     </footer>

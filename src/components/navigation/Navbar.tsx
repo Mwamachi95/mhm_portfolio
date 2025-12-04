@@ -41,7 +41,7 @@ const Logo = ({ color }: LogoProps) => {
         </motion.svg>
 
         {/* Mwamachi text and underline */}
-        <div className="absolute left-0 top-full overflow-hidden w-16 sm:w-20 md:w-24">
+        <div className="absolute left-0 top-full overflow-hidden">
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{
@@ -52,7 +52,7 @@ const Logo = ({ color }: LogoProps) => {
               duration: 0.4,
               ease: [0.25, 0.46, 0.45, 0.94],
             }}
-            className="text-xs sm:text-sm font-bold whitespace-nowrap lowercase w-full"
+            className="text-xs sm:text-sm font-bold whitespace-nowrap lowercase"
             style={{ letterSpacing: '0.26em', color, transition: 'color 0.3s ease' }}
           >
             Mwamachi
@@ -76,8 +76,8 @@ const Logo = ({ color }: LogoProps) => {
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
-  const [navColor, setNavColor] = useState('#507579');
-  const [aboutColor, setAboutColor] = useState('#507579');
+  const [navColor, setNavColor] = useState('rgb(80, 117, 121)'); // primary
+  const [aboutColor, setAboutColor] = useState('rgb(80, 117, 121)'); // primary
   const [isNavOverFooter, setIsNavOverFooter] = useState(false);
   const [isAboutOverFooter, setIsAboutOverFooter] = useState(false);
 
@@ -92,22 +92,22 @@ export function Navbar() {
   // Handle menu open/close color changes for top navbar
   useEffect(() => {
     if (isMenuOpen) {
-      setNavColor('#1B3033');
+      setNavColor('rgb(27, 48, 51)'); // foreground
     } else if (isNavOverFooter) {
-      setNavColor('#C0D5CE');
+      setNavColor('rgb(192, 213, 206)'); // dark-fg
     } else {
-      setNavColor('#507579');
+      setNavColor('rgb(80, 117, 121)'); // primary
     }
   }, [isMenuOpen, isNavOverFooter]);
 
   // Handle color changes for About link (bottom-right)
   useEffect(() => {
     if (isMenuOpen) {
-      setAboutColor('#1B3033');
+      setAboutColor('rgb(27, 48, 51)'); // foreground
     } else if (isAboutOverFooter) {
-      setAboutColor('#C0D5CE');
+      setAboutColor('rgb(192, 213, 206)'); // dark-fg
     } else {
-      setAboutColor('#507579');
+      setAboutColor('rgb(80, 117, 121)'); // primary
     }
   }, [isMenuOpen, isAboutOverFooter]);
 
@@ -163,7 +163,7 @@ export function Navbar() {
 
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-lg sm:text-xl font-medium hover:opacity-80"
+            className="font-body text-lg sm:text-xl font-medium hover:opacity-80"
             style={{ color: navColor, transition: 'color 0.3s ease, opacity 0.3s ease' }}
           >
             {isMenuOpen ? 'Close' : 'Menu'}
@@ -182,7 +182,7 @@ export function Navbar() {
               duration: 1,
               ease: [0.25, 0.46, 0.45, 0.94],
             }}
-            className="fixed inset-0 z-50 bg-[#C0D5CE]"
+            className="fixed inset-0 z-50 bg-accent"
           >
             {/* Navigation Links - Pushed to Left */}
             <div className="flex items-center justify-start h-full pl-[8%] sm:pl-[10%] md:pl-[15%]">
@@ -199,7 +199,7 @@ export function Navbar() {
                           delay: 0.6 + index * 0.1,
                           ease: [0.25, 0.46, 0.45, 0.94],
                         }}
-                        className="h-[1px] bg-[#1B3033] w-[84vw] sm:w-[82vw] md:w-[calc(100vw-15%-10rem)]"
+                        className="h-[1px] bg-foreground w-[84vw] sm:w-[82vw] md:w-[calc(100vw-15%-10rem)]"
                       />
                     );
                   }
@@ -217,7 +217,7 @@ export function Navbar() {
                     >
                       <Link
                         href={link.href}
-                        className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-[#1B3033] transition-opacity duration-300"
+                        className="block font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-foreground transition-opacity duration-300"
                         style={{
                           opacity: hoveredLink === null || hoveredLink === link.name ? 1 : 0.4,
                         }}
@@ -239,7 +239,7 @@ export function Navbar() {
       {/* About Link - Fixed Bottom Right */}
       <Link
         href="/about"
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 z-50 text-base sm:text-lg hover:opacity-80"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 z-50 font-body text-base sm:text-lg hover:opacity-80"
         style={{ color: aboutColor, transition: 'color 0.3s ease, opacity 0.3s ease' }}
       >
         About
