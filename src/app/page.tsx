@@ -1,84 +1,102 @@
 'use client';
 
-import { useState } from 'react';
-import Image from "next/image";
+import { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { LogoIntro } from '@/components/intro/LogoIntro';
 
+const ROTATING_WORDS = ['experience', 'websites', 'illustration', 'brands'];
+const WORD_DISPLAY_TIME = 2500; // 2.5 seconds per word
+const TRANSITION_DURATION = 0.6; // 0.6 seconds for transition
+
+interface AnimatedWordProps {
+  word: string;
+}
+
+const AnimatedWord = ({ word }: AnimatedWordProps) => {
+  return (
+    <motion.span
+      key={word}
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: -20, opacity: 0 }}
+      transition={{
+        duration: TRANSITION_DURATION,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      }}
+      className="absolute left-0 bottom-0 inline-block"
+    >
+      {word}
+    </motion.span>
+  );
+};
+
 export default function Home() {
   const [showIntro, setShowIntro] = useState(true);
+  const [showHero, setShowHero] = useState(false);
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+
+  // Memoize the callback to prevent useEffect in LogoIntro from restarting
+  const handleIntroComplete = useCallback(() => {
+    setShowIntro(false);
+    // Delay hero appearance to allow white background to show
+    setTimeout(() => {
+      setShowHero(true);
+    }, 1500); // 1.5s gap for white background pause
+  }, []);
+
+  // Auto-rotate words
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentWordIndex((prev) => (prev + 1) % ROTATING_WORDS.length);
+    }, WORD_DISPLAY_TIME);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
       <AnimatePresence>
-        {showIntro && <LogoIntro onComplete={() => setShowIntro(false)} />}
+        {showIntro && <LogoIntro onComplete={handleIntroComplete} />}
       </AnimatePresence>
 
-      {!showIntro && (
-        <motion.div
-          className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black"
+      {/* White background pause between intro and hero */}
+      {!showIntro && !showHero && (
+        <div className="fixed inset-0 bg-background" />
+      )}
+
+      {/* Hero section */}
+      {showHero && (
+        <motion.section
+          className="flex min-h-screen items-end justify-center px-8 pb-32 sm:pb-40 md:pb-48"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+          transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
-          <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-            <Image
-              className="dark:invert"
-              src="/next.svg"
-              alt="Next.js logo"
-              width={100}
-              height={20}
-              priority
-            />
-            <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-              <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-                To get started, edit the page.tsx file.
-              </h1>
-              <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-                Looking for a starting point or more instructions? Head over to{" "}
-                <a
-                  href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                  className="font-medium text-zinc-950 dark:text-zinc-50"
-                >
-                  Templates
-                </a>{" "}
-                or the{" "}
-                <a
-                  href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                  className="font-medium text-zinc-950 dark:text-zinc-50"
-                >
-                  Learning
-                </a>{" "}
-                center.
-              </p>
-            </div>
-            <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-              <a
-                className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-                href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                target="_blank"
-                rel="noopener noreferrer"
+          <div className="text-left">
+            {/* Line 1: Greeting */}
+            <p className="font-body text-2xl md:text-3xl lg:text-4xl font-medium text-muted">
+              Hey, I'm Heinz
+            </p>
+
+            {/* Line 2: Hero statement with rotating text */}
+            <h1 className="font-display text-5xl md:text-6xl lg:text-8xl font-semibold text-foreground mt-3">
+              A designer of{' '}
+              <span
+                className="inline-block relative min-w-[280px] md:min-w-[420px] lg:min-w-[600px] text-left align-bottom"
+                style={{ minHeight: '1.2em' }}
               >
-                <Image
-                  className="dark:invert"
-                  src="/vercel.svg"
-                  alt="Vercel logomark"
-                  width={16}
-                  height={16}
-                />
-                Deploy Now
-              </a>
-              <a
-                className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-                href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Documentation
-              </a>
-            </div>
-          </main>
-        </motion.div>
+                <AnimatePresence>
+                  <AnimatedWord word={ROTATING_WORDS[currentWordIndex]} />
+                </AnimatePresence>
+              </span>
+            </h1>
+
+            {/* Line 3: Supporting text */}
+            <p className="font-body text-base md:text-lg lg:text-xl font-normal text-muted opacity-80 mt-6">
+              Connecting strategy, design, and digital craft
+            </p>
+          </div>
+        </motion.section>
       )}
     </>
   );
