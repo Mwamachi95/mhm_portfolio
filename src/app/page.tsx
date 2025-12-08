@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { LogoIntro } from '@/components/intro/LogoIntro';
+import { ProjectsShowcase } from '@/components/sections/ProjectsShowcase';
 
 const ROTATING_WORDS = ['experience', 'websites', 'illustration', 'brands'];
 const WORD_DISPLAY_TIME = 2500; // 2.5 seconds per word
@@ -64,39 +65,45 @@ export default function Home() {
         <div className="fixed inset-0 bg-background" />
       )}
 
-      {/* Hero section */}
+      {/* Main content */}
       {showHero && (
-        <motion.section
-          className="flex min-h-screen items-end justify-center px-8 pb-32 sm:pb-40 md:pb-48"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-        >
-          <div className="text-left">
-            {/* Line 1: Greeting */}
-            <p className="font-body text-2xl md:text-3xl lg:text-4xl font-medium text-muted">
-              Hey, I'm Heinz
-            </p>
+        <>
+          {/* Hero section */}
+          <motion.section
+            className="flex min-h-screen items-end justify-center px-8 pb-32 sm:pb-40 md:pb-48"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            <div className="text-left">
+              {/* Line 1: Greeting */}
+              <p className="font-body text-2xl md:text-3xl lg:text-4xl font-medium text-muted">
+                Hey, I'm Heinz
+              </p>
 
-            {/* Line 2: Hero statement with rotating text */}
-            <h1 className="font-display text-5xl md:text-6xl lg:text-8xl font-semibold text-foreground mt-3">
-              A designer of{' '}
-              <span
-                className="inline-block relative min-w-[280px] md:min-w-[420px] lg:min-w-[600px] text-left align-bottom"
-                style={{ minHeight: '1.2em' }}
-              >
-                <AnimatePresence>
-                  <AnimatedWord word={ROTATING_WORDS[currentWordIndex]} />
-                </AnimatePresence>
-              </span>
-            </h1>
+              {/* Line 2: Hero statement with rotating text */}
+              <h1 className="font-display text-5xl md:text-6xl lg:text-8xl font-semibold text-foreground mt-3">
+                A designer of{' '}
+                <span
+                  className="inline-block relative min-w-[280px] md:min-w-[420px] lg:min-w-[600px] text-left align-bottom"
+                  style={{ minHeight: '1.2em' }}
+                >
+                  <AnimatePresence>
+                    <AnimatedWord word={ROTATING_WORDS[currentWordIndex]} />
+                  </AnimatePresence>
+                </span>
+              </h1>
 
-            {/* Line 3: Supporting text */}
-            <p className="font-body text-base md:text-lg lg:text-xl font-normal text-muted opacity-80 mt-6">
-              Connecting strategy, design, and digital craft
-            </p>
-          </div>
-        </motion.section>
+              {/* Line 3: Supporting text */}
+              <p className="font-body text-base md:text-lg lg:text-xl font-normal text-muted opacity-80 mt-6">
+                Connecting strategy, design, and digital craft
+              </p>
+            </div>
+          </motion.section>
+
+          {/* Projects showcase section */}
+          <ProjectsShowcase />
+        </>
       )}
     </>
   );
