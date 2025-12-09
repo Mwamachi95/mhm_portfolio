@@ -1,7 +1,7 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useState, useEffect } from 'react';
+import { motion, useScroll, useTransform, useMotionTemplate } from 'framer-motion';
 
 interface ProjectCard {
   id: string;
@@ -19,195 +19,150 @@ const PLACEHOLDER_PROJECTS: ProjectCard[] = [
   {
     id: '2',
     title: 'Project 2',
-    category: 'Illustrations',
-  },
-  {
-    id: '3',
-    title: 'Project 3',
-    category: 'Ideas',
+    category: 'Mobile Apps',
   },
 ];
 
-export function ProjectsShowcase() {
+// Simplified fallback layout for mobile/tablet
+function ProjectsShowcaseFallback() {
+  return (
+    <section className="bg-background py-16 md:py-20">
+      <div className="w-full px-8">
+        {/* Section title */}
+        <h2 className="font-display text-[12vw] md:text-[10vw] font-bold text-foreground leading-none mb-8 md:mb-12">
+          projects
+        </h2>
+
+        {/* Project Card */}
+        <div className="w-full max-w-lg h-[60vh] bg-muted/20 rounded-lg overflow-hidden border border-border/50 relative">
+          {/* Placeholder image area */}
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-muted/30 to-muted/10">
+            <span className="font-display text-4xl md:text-5xl font-semibold text-muted-foreground/30">
+              {PLACEHOLDER_PROJECTS[0].title}
+            </span>
+          </div>
+
+          {/* Category badge */}
+          <div className="absolute top-4 left-4 md:top-6 md:left-6">
+            <span className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-background/80 backdrop-blur-sm border border-border/50 rounded-full text-xs md:text-sm font-medium text-foreground">
+              {PLACEHOLDER_PROJECTS[0].category}
+            </span>
+          </div>
+
+          {/* Title overlay at bottom */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-gradient-to-t from-background/90 to-transparent">
+            <h3 className="font-display text-xl md:text-2xl font-semibold text-foreground">
+              {PLACEHOLDER_PROJECTS[0].title}
+            </h3>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Desktop animated version
+function ProjectsShowcaseDesktop() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Track scroll progress through this section
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start end', 'end start'],
+    offset: ['start start', 'end end'],
   });
 
-  const LETTERS = ['p', 'r', 'o', 'j', 'e', 'c', 't', 's'];
+  // Phase 1 (0 - 0.33): Scale down "projects" word until it disappears
+  const projectsScale = useTransform(scrollYProgress, [0, 0.33], [1, 0]);
 
-  // Horizontal card translation
-  // Card width ~400px + spacing ~80px = ~480px per card
-  // Start with first card 25% visible (75% offscreen = ~300px to the right)
-  // Delay the animation start until section is in view
-  const cardTranslateX = useTransform(
-    scrollYProgress,
-    [0, 0.15, 0.3, 1], // No movement for first 15%, then move, freeze at 30%
-    [300, 300, -900, -900] // Hold position, then move left, stop at -900px and HOLD
-  );
+  // Card position: moves from right to left edge
+  const cardLeftValue = useTransform(scrollYProgress, [0, 0.33], [75, 0]);
+  const cardLeft = useMotionTemplate`${cardLeftValue}vw`;
 
-  // Corner-turning animation for letters
-  // "p" then "r" - each topples & shrinks first, then pulls upward
+  // Phase 2 (0.33 - 0.5): Viewport width expands
+  const viewportWidthValue = useTransform(scrollYProgress, [0.33, 0.5], [35, 50]);
+  const viewportWidth = useMotionTemplate`${viewportWidthValue}vw`;
 
-  // Animation for "p" (index 0)
-  // Step 1: Rotate and scale
-  // Step 2: Then pull upward
-  const pRotation = useTransform(scrollYProgress, [0.15, 0.18, 1], [0, 90, 90]);
-  const pScale = useTransform(scrollYProgress, [0.15, 0.18, 1], [1, 0.45, 0.45]);
-  const pYPosition = useTransform(scrollYProgress, [0.15, 0.18, 0.22, 1], [0, 0, -575, -575]);
-  const pXPosition = useTransform(scrollYProgress, [0.15, 0.22, 1], [0, 0, 0]);
-
-  // Animation for "r" (index 1)
-  const rRotation = useTransform(scrollYProgress, [0.198, 0.223, 1], [0, 90, 90]);
-  const rScale = useTransform(scrollYProgress, [0.198, 0.223, 1], [1, 0.45, 0.45]);
-  const rYPosition = useTransform(scrollYProgress, [0.198, 0.223, 0.24, 1], [0, 0, -490, -490]);
-  const rXPosition = useTransform(
-    scrollYProgress,
-    [0.15, 0.18, 0.188, 0.198, 1],
-    [0, -100, -100, -200, -200]
-  );
-
-  // Animation for "o" (index 2)
-  const oRotation = useTransform(scrollYProgress, [0.24, 0.258, 1], [0, 90, 90]);
-  const oScale = useTransform(scrollYProgress, [0.24, 0.258, 1], [1, 0.45, 0.45]);
-  const oYPosition = useTransform(scrollYProgress, [0.24, 0.258, 0.268, 1], [0, 0, -450, -450]);
-  const oXPosition = useTransform(
-    scrollYProgress,
-    [0.15, 0.18, 0.198, 0.223, 0.233, 0.24, 1],
-    [0, -100, -100, -200, -200, -300, -300]
-  );
-
-  // Progressive pull effects for remaining letters
-  const rojectsPullX = useTransform(scrollYProgress, [0.15, 0.18, 1], [0, -100, -100]);
-  const ojectsPullX = useTransform(scrollYProgress, [0.15, 0.18, 0.198, 0.223, 1], [0, -100, -100, -200, -200]);
-
-  // Animation for "j" (index 3)
-  const jRotation = useTransform(scrollYProgress, [0.275, 0.293, 1], [0, 90, 90]);
-  const jScale = useTransform(scrollYProgress, [0.275, 0.293, 1], [1, 0.45, 0.45]);
-  const jYPosition = useTransform(scrollYProgress, [0.275, 0.293, 0.31, 1], [0, 0, -370, -370]);
-  const jXPosition = useTransform(
-    scrollYProgress,
-    [0.15, 0.18, 0.198, 0.223, 0.233, 0.24, 0.258, 0.275, 1],
-    [0, -100, -100, -200, -200, -300, -300, -475, -475]
-  );
-
-  // Animation for "e" (index 4)
-  const eRotation = useTransform(scrollYProgress, [0.317, 0.335, 1], [0, 90, 90]);
-  const eScale = useTransform(scrollYProgress, [0.317, 0.335, 1], [1, 0.45, 0.45]);
-  const eYPosition = useTransform(scrollYProgress, [0.317, 0.335, 0.352, 1], [0, 0, -340, -340]);
-  const eXPosition = useTransform(
-    scrollYProgress,
-    [0.15, 0.18, 0.198, 0.223, 0.233, 0.24, 0.258, 0.275, 0.3, 0.317, 1],
-    [0, -100, -100, -200, -200, -300, -300, -400, -400, -540, -540]
-  );
-
-  // Animation for "c" (index 5)
-  const cRotation = useTransform(scrollYProgress, [0.359, 0.377, 1], [0, 90, 90]);
-  const cScale = useTransform(scrollYProgress, [0.359, 0.377, 1], [1, 0.45, 0.45]);
-  const cYPosition = useTransform(scrollYProgress, [0.359, 0.377, 0.394, 1], [0, 0, -255, -255]);
-  const cXPosition = useTransform(
-    scrollYProgress,
-    [0.15, 0.18, 0.198, 0.223, 0.233, 0.24, 0.258, 0.275, 0.3, 0.317, 0.342, 0.359, 1],
-    [0, -100, -100, -200, -200, -300, -300, -400, -400, -550, -550, -710, -710]
-  );
-
-  // Animation for "t" (index 6)
-  const tRotation = useTransform(scrollYProgress, [0.401, 0.419, 1], [0, 90, 90]);
-  const tScale = useTransform(scrollYProgress, [0.401, 0.419, 1], [1, 0.45, 0.45]);
-  const tYPosition = useTransform(scrollYProgress, [0.401, 0.419, 0.436, 1], [0, 0, -175, -175]);
-  const tXPosition = useTransform(
-    scrollYProgress,
-    [0.15, 0.18, 0.198, 0.223, 0.233, 0.24, 0.258, 0.275, 0.3, 0.317, 0.342, 0.359, 0.377, 0.387, 0.401, 1],
-    [0, -100, -100, -200, -200, -300, -300, -400, -400, -550, -550, -690, -690, -750, -880, -880]
-  );
-
-  // Animation for "s" (index 7)
-  const sRotation = useTransform(scrollYProgress, [0.443, 0.445, 1], [0, 90, 90]);
-  const sScale = useTransform(scrollYProgress, [0.443, 0.445, 1], [1, 0.45, 0.45]);
-  const sYPosition = useTransform(scrollYProgress, [0.443, 0.445, 0.448, 1], [0, 0, -120, -120]);
-  const sXPosition = useTransform(
-    scrollYProgress,
-    [0.15, 0.18, 0.198, 0.223, 0.233, 0.24, 0.258, 0.275, 0.3, 0.317, 0.342, 0.359, 0.377, 0.387, 0.401, 0.443, 1],
-    [0, -100, -100, -200, -200, -300, -300, -400, -400, -550, -550, -690, -690, -740, -870, -990, -990]
-  );
-
-  const staticRotation = useTransform(scrollYProgress, [0, 1], [0, 0]);
-  const staticScale = useTransform(scrollYProgress, [0, 1], [1, 1]);
-  const staticY = useTransform(scrollYProgress, [0, 1], [0, 0]);
-
-  const letterTransforms = LETTERS.map((_, index) => {
-    if (index === 0) {
-      return { rotation: pRotation, scale: pScale, yPosition: pYPosition, xPosition: pXPosition };
-    } else if (index === 1) {
-      return { rotation: rRotation, scale: rScale, yPosition: rYPosition, xPosition: rXPosition };
-    } else if (index === 2) {
-      return { rotation: oRotation, scale: oScale, yPosition: oYPosition, xPosition: oXPosition };
-    } else if (index === 3) {
-      return { rotation: jRotation, scale: jScale, yPosition: jYPosition, xPosition: jXPosition };
-    } else if (index === 4) {
-      return { rotation: eRotation, scale: eScale, yPosition: eYPosition, xPosition: eXPosition };
-    } else if (index === 5) {
-      return { rotation: cRotation, scale: cScale, yPosition: cYPosition, xPosition: cXPosition };
-    } else if (index === 6) {
-      return { rotation: tRotation, scale: tScale, yPosition: tYPosition, xPosition: tXPosition };
-    } else if (index === 7) {
-      return { rotation: sRotation, scale: sScale, yPosition: sYPosition, xPosition: sXPosition };
-    } else {
-      // Fallback (shouldn't reach here with current LETTERS array)
-      return {
-        rotation: staticRotation,
-        scale: staticScale,
-        yPosition: staticY,
-        xPosition: rojectsPullX,
-      };
-    }
-  });
+  // Phase 3 (0.5 - 1): Content slides inside the fixed viewport
+  // Content strip is 300% wide (3 panels), so -33.33% moves by one panel
+  const contentSlidePercent = useTransform(scrollYProgress, [0.5, 1], [0, -33.33]);
+  const contentSlideTransform = useMotionTemplate`${contentSlidePercent}%`;
 
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[1000vh] bg-background"
+      className="relative min-h-[400vh] bg-background"
     >
-      {/* Sticky container for the content */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-end">
-        {/* Bottom-left layout: "projects" text with cards starting at the end */}
-        <div className="w-full px-8 pb-16 md:pb-20 lg:pb-24 pt-32 md:pt-40 lg:pt-48 overflow-x-hidden">
-          <div className="flex items-end">
-            {/* "projects" text */}
-            <div className="flex items-end flex-shrink-0">
-              {LETTERS.map((letter, index) => (
-                <motion.span
-                  key={index}
-                  className="font-display text-[12vw] md:text-[14vw] lg:text-[16vw] font-bold text-foreground inline-block leading-none origin-bottom-left"
-                  style={{
-                    rotate: letterTransforms[index].rotation,
-                    y: letterTransforms[index].yPosition,
-                    x: letterTransforms[index].xPosition,
-                    scale: letterTransforms[index].scale,
-                  }}
-                >
-                  {letter}
-                </motion.span>
-              ))}
-            </div>
-
-            {/* Horizontal scrolling cards - starting at end of "projects" */}
-            <motion.div
-              className="flex items-end gap-8 md:gap-12 lg:gap-16 ml-8 md:ml-12 lg:ml-16 flex-shrink-0"
+      {/* Sticky container */}
+      <div className="sticky top-0 h-screen w-full flex items-end overflow-hidden">
+        <div className="w-full px-8 pb-24">
+          <div className="relative overflow-x-clip overflow-y-visible">
+            {/* "projects" text - scales down */}
+            <motion.h2
+              className="font-display text-[16vw] font-bold text-foreground leading-none"
               style={{
-                x: cardTranslateX,
+                scale: projectsScale,
+                transformOrigin: 'left bottom'
               }}
             >
-              {PLACEHOLDER_PROJECTS.map((project, index) => (
-                <ProjectCardComponent
-                  key={project.id}
-                  project={project}
-                  index={index}
-                />
-              ))}
+              projects
+            </motion.h2>
+
+            {/* Fixed viewport card - moves to left edge, expands, then content slides through it */}
+            <motion.div
+              className="absolute bottom-0 h-[70vh] rounded-lg overflow-hidden border border-border/50"
+              style={{
+                left: cardLeft,
+                width: viewportWidth,
+              }}
+            >
+              {/* Content strip - slides horizontally through the viewport */}
+              <motion.div
+                className="flex h-full"
+                style={{
+                  width: '300%', // 3 panels: Project 1, Project 2, Project 1 (for cyclical)
+                  x: contentSlideTransform
+                }}
+              >
+                {/* Project 1 content panel */}
+                <div className="relative w-1/3 h-full flex-shrink-0">
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500/20 to-purple-500/20">
+                    <span className="font-display text-4xl md:text-5xl font-semibold text-muted-foreground/30">
+                      {PLACEHOLDER_PROJECTS[0].title}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Project 2 content panel */}
+                <div className="relative w-1/3 h-full flex-shrink-0">
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-500/20 to-teal-500/20">
+                    <span className="font-display text-4xl md:text-5xl font-semibold text-muted-foreground/30">
+                      {PLACEHOLDER_PROJECTS[1].title}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Project 1 again (for cyclical loop) */}
+                <div className="relative w-1/3 h-full flex-shrink-0">
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500/20 to-purple-500/20">
+                    <span className="font-display text-4xl md:text-5xl font-semibold text-muted-foreground/30">
+                      {PLACEHOLDER_PROJECTS[0].title}
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Category badge - stays fixed on viewport */}
+              <div className="absolute top-4 left-4 md:top-6 md:left-6 z-10">
+                <span className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-background/80 backdrop-blur-sm border border-border/50 rounded-full text-xs md:text-sm font-medium text-foreground">
+                  {PLACEHOLDER_PROJECTS[0].category}
+                </span>
+              </div>
+
+              {/* Title overlay at bottom - stays fixed on viewport */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-gradient-to-t from-background/90 to-transparent z-10">
+                <h3 className="font-display text-xl md:text-2xl font-semibold text-foreground">
+                  {PLACEHOLDER_PROJECTS[0].title}
+                </h3>
+              </div>
             </motion.div>
           </div>
         </div>
@@ -216,37 +171,26 @@ export function ProjectsShowcase() {
   );
 }
 
-interface ProjectCardComponentProps {
-  project: ProjectCard;
-  index: number;
-}
+// Main export - switches between fallback and desktop based on screen size
+export function ProjectsShowcase() {
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-function ProjectCardComponent({ project, index }: ProjectCardComponentProps) {
-  return (
-    <div
-      className="relative flex-shrink-0 w-[70vw] md:w-[50vw] lg:w-[400px] h-[50vh] md:h-[55vh] lg:h-[60vh] bg-muted/20 rounded-lg overflow-hidden border border-border/50"
-      style={{ willChange: 'transform' }}
-    >
-      {/* Placeholder image area */}
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-muted/30 to-muted/10">
-        <span className="font-display text-4xl md:text-5xl font-semibold text-muted-foreground/30">
-          {project.title}
-        </span>
-      </div>
+  useEffect(() => {
+    setMounted(true);
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
 
-      {/* Category badge */}
-      <div className="absolute top-4 left-4 md:top-6 md:left-6">
-        <span className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-background/80 backdrop-blur-sm border border-border/50 rounded-full text-xs md:text-sm font-medium text-foreground">
-          {project.category}
-        </span>
-      </div>
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
-      {/* Title overlay at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-gradient-to-t from-background/90 to-transparent">
-        <h3 className="font-display text-xl md:text-2xl font-semibold text-foreground">
-          {project.title}
-        </h3>
-      </div>
-    </div>
-  );
+  // Prevent hydration mismatch by showing nothing until mounted
+  if (!mounted) {
+    return null;
+  }
+
+  return isDesktop ? <ProjectsShowcaseDesktop /> : <ProjectsShowcaseFallback />;
 }
