@@ -21,6 +21,24 @@ const PLACEHOLDER_PROJECTS: ProjectCard[] = [
     title: 'Project 2',
     category: 'Mobile Apps',
   },
+  {
+    id: '3',
+    title: 'Project 3',
+    category: 'Branding',
+  },
+  {
+    id: '4',
+    title: 'Project 4',
+    category: 'Illustrations',
+  },
+];
+
+// Card colors for visual distinction
+const CARD_COLORS = [
+  'from-blue-500/20 to-purple-500/20',
+  'from-emerald-500/20 to-teal-500/20',
+  'from-orange-500/20 to-red-500/20',
+  'from-pink-500/20 to-purple-500/20',
 ];
 
 // Simplified fallback layout for mobile/tablet
@@ -61,7 +79,7 @@ function ProjectsShowcaseFallback() {
   );
 }
 
-// Desktop animated version
+// Desktop animated version with carousel
 function ProjectsShowcaseDesktop() {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -73,23 +91,114 @@ function ProjectsShowcaseDesktop() {
   // Phase 1 (0 - 0.33): Scale down "projects" word until it disappears
   const projectsScale = useTransform(scrollYProgress, [0, 0.33], [1, 0]);
 
-  // Card position: moves from right to left edge
-  const cardLeftValue = useTransform(scrollYProgress, [0, 0.33], [75, 0]);
-  const cardLeft = useMotionTemplate`${cardLeftValue}vw`;
+  // Viewport position: moves from right to left edge during Phase 1
+  const viewportLeftValue = useTransform(scrollYProgress, [0, 0.33], [75, 0]);
+  const viewportLeft = useMotionTemplate`${viewportLeftValue}vw`;
 
-  // Phase 2 (0.33 - 0.5): Viewport width expands
-  const viewportWidthValue = useTransform(scrollYProgress, [0.33, 0.5], [35, 50]);
-  const viewportWidth = useMotionTemplate`${viewportWidthValue}vw`;
+  // Card dimensions
+  const cardWidth = 35; // vw - standard card width
+  const expandedWidth = 75; // vw - expanded card in focus
+  const gap = 4; // vw - gap between cards
+  const numCards = PLACEHOLDER_PROJECTS.length;
 
-  // Phase 3 (0.5 - 1): Content slides inside the fixed viewport
-  // Content strip is 300% wide (3 panels), so -33.33% moves by one panel
-  const contentSlidePercent = useTransform(scrollYProgress, [0.5, 1], [0, -33.33]);
-  const contentSlideTransform = useMotionTemplate`${contentSlidePercent}%`;
+  // Timeline: Each card gets equal time for its expand/retract/exit cycle
+  // Phase 2 starts at 0.33, ends at 1.0 (0.67 duration)
+  const phase2Start = 0.33;
+  const phase2Duration = 0.67;
+  const cardCycleDuration = phase2Duration / numCards; // ~0.17 per card
+
+  // Helper to calculate card timing
+  const getCardTiming = (index: number) => {
+    const start = phase2Start + index * cardCycleDuration;
+    const end = start + cardCycleDuration;
+    return { start, end };
+  };
+
+  // Timing within each card cycle (more gradual transitions)
+  const expandDuration = 0.06; // Time to expand
+  const retractDuration = 0.04; // Time to retract
+  const slideBuffer = 0.03; // Buffer after slide completes before next card expands
+
+  // Card 1: expand → hold → retract (starts immediately at phase 2)
+  const card1Timing = getCardTiming(0);
+  const card1Width = useTransform(
+    scrollYProgress,
+    [
+      card1Timing.start,
+      card1Timing.start + expandDuration,
+      card1Timing.end - retractDuration - 0.02,
+      card1Timing.end - 0.02
+    ],
+    [cardWidth, expandedWidth, expandedWidth, cardWidth]
+  );
+
+  // Card 2: expand AFTER row slide brings it to position 0
+  const card2Timing = getCardTiming(1);
+  const card2ExpandStart = card1Timing.end + slideBuffer; // Wait for slide to complete
+  const card2Width = useTransform(
+    scrollYProgress,
+    [
+      card2ExpandStart,
+      card2ExpandStart + expandDuration,
+      card2Timing.end - retractDuration - 0.02,
+      card2Timing.end - 0.02
+    ],
+    [cardWidth, expandedWidth, expandedWidth, cardWidth]
+  );
+
+  // Card 3: expand AFTER row slide brings it to position 0
+  const card3Timing = getCardTiming(2);
+  const card3ExpandStart = card2Timing.end + slideBuffer; // Wait for slide to complete
+  const card3Width = useTransform(
+    scrollYProgress,
+    [
+      card3ExpandStart,
+      card3ExpandStart + expandDuration,
+      card3Timing.end - retractDuration - 0.02,
+      card3Timing.end - 0.02
+    ],
+    [cardWidth, expandedWidth, expandedWidth, cardWidth]
+  );
+
+  // Card 4: expand AFTER row slide brings it to position 0 (stays expanded)
+  const card4Timing = getCardTiming(3);
+  const card4ExpandStart = card3Timing.end + slideBuffer; // Wait for slide to complete
+  const card4Width = useTransform(
+    scrollYProgress,
+    [card4ExpandStart, card4ExpandStart + expandDuration],
+    [cardWidth, expandedWidth]
+  );
+
+  // Convert widths to motion templates
+  const card1WidthVw = useMotionTemplate`${card1Width}vw`;
+  const card2WidthVw = useMotionTemplate`${card2Width}vw`;
+  const card3WidthVw = useMotionTemplate`${card3Width}vw`;
+  const card4WidthVw = useMotionTemplate`${card4Width}vw`;
+
+  const cardWidths = [card1WidthVw, card2WidthVw, card3WidthVw, card4WidthVw];
+
+  // Row translation: slides left gradually after each card's cycle
+  // Slower transition - spread over more scroll distance
+  const slideUnit = cardWidth + gap; // 39vw per card
+  const rowTranslateValue = useTransform(
+    scrollYProgress,
+    [
+      card1Timing.end - 0.04, card1Timing.end + 0.02,  // Card 1 exits (slower)
+      card2Timing.end - 0.04, card2Timing.end + 0.02,  // Card 2 exits (slower)
+      card3Timing.end - 0.04, card3Timing.end + 0.02   // Card 3 exits (slower)
+    ],
+    [
+      0, -slideUnit,                    // -39vw after Card 1
+      -slideUnit, -2 * slideUnit,       // -78vw after Card 2
+      -2 * slideUnit, -3 * slideUnit    // -117vw after Card 3
+    ]
+  );
+  const rowTranslate = useMotionTemplate`${rowTranslateValue}vw`;
 
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[400vh] bg-background"
+      className="relative min-h-[800vh] bg-background"
     >
       {/* Sticky container */}
       <div className="sticky top-0 h-screen w-full flex items-end overflow-hidden">
@@ -106,63 +215,45 @@ function ProjectsShowcaseDesktop() {
               projects
             </motion.h2>
 
-            {/* Fixed viewport card - moves to left edge, expands, then content slides through it */}
+            {/* Cards row - all cards visible, flex row with gaps */}
             <motion.div
-              className="absolute bottom-0 h-[70vh] rounded-lg overflow-hidden border border-border/50"
+              className="absolute bottom-0 flex h-[70vh]"
               style={{
-                left: cardLeft,
-                width: viewportWidth,
+                left: viewportLeft,
+                gap: `${gap}vw`,
+                x: rowTranslate
               }}
             >
-              {/* Content strip - slides horizontally through the viewport */}
-              <motion.div
-                className="flex h-full"
-                style={{
-                  width: '300%', // 3 panels: Project 1, Project 2, Project 1 (for cyclical)
-                  x: contentSlideTransform
-                }}
-              >
-                {/* Project 1 content panel */}
-                <div className="relative w-1/3 h-full flex-shrink-0">
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500/20 to-purple-500/20">
+              {PLACEHOLDER_PROJECTS.map((project, index) => (
+                <motion.div
+                  key={project.id}
+                  className="relative h-full flex-shrink-0 rounded-lg overflow-hidden border border-border/50"
+                  style={{
+                    width: cardWidths[index]
+                  }}
+                >
+                  {/* Card background */}
+                  <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${CARD_COLORS[index]}`}>
                     <span className="font-display text-4xl md:text-5xl font-semibold text-muted-foreground/30">
-                      {PLACEHOLDER_PROJECTS[0].title}
+                      {project.title}
                     </span>
                   </div>
-                </div>
 
-                {/* Project 2 content panel */}
-                <div className="relative w-1/3 h-full flex-shrink-0">
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-500/20 to-teal-500/20">
-                    <span className="font-display text-4xl md:text-5xl font-semibold text-muted-foreground/30">
-                      {PLACEHOLDER_PROJECTS[1].title}
+                  {/* Category badge */}
+                  <div className="absolute top-4 left-4 md:top-6 md:left-6">
+                    <span className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-background/80 backdrop-blur-sm border border-border/50 rounded-full text-xs md:text-sm font-medium text-foreground">
+                      {project.category}
                     </span>
                   </div>
-                </div>
 
-                {/* Project 1 again (for cyclical loop) */}
-                <div className="relative w-1/3 h-full flex-shrink-0">
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500/20 to-purple-500/20">
-                    <span className="font-display text-4xl md:text-5xl font-semibold text-muted-foreground/30">
-                      {PLACEHOLDER_PROJECTS[0].title}
-                    </span>
+                  {/* Title overlay at bottom */}
+                  <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-gradient-to-t from-background/90 to-transparent">
+                    <h3 className="font-display text-xl md:text-2xl font-semibold text-foreground">
+                      {project.title}
+                    </h3>
                   </div>
-                </div>
-              </motion.div>
-
-              {/* Category badge - stays fixed on viewport */}
-              <div className="absolute top-4 left-4 md:top-6 md:left-6 z-10">
-                <span className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-background/80 backdrop-blur-sm border border-border/50 rounded-full text-xs md:text-sm font-medium text-foreground">
-                  {PLACEHOLDER_PROJECTS[0].category}
-                </span>
-              </div>
-
-              {/* Title overlay at bottom - stays fixed on viewport */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-gradient-to-t from-background/90 to-transparent z-10">
-                <h3 className="font-display text-xl md:text-2xl font-semibold text-foreground">
-                  {PLACEHOLDER_PROJECTS[0].title}
-                </h3>
-              </div>
+                </motion.div>
+              ))}
             </motion.div>
           </div>
         </div>
