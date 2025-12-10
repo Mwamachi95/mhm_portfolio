@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useMotionTemplate } from 'framer-motion';
+import Link from 'next/link';
 
 interface ProjectCard {
   id: string;
@@ -254,6 +255,31 @@ function ProjectsShowcaseDesktop() {
                   </div>
                 </motion.div>
               ))}
+
+              {/* View All Projects button */}
+              <div className="flex-shrink-0 h-full flex items-end">
+                <Link
+                  href="/websites"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border/50 bg-background/80 backdrop-blur-sm hover:bg-muted/20 transition-colors group"
+                >
+                  <span className="font-medium text-sm text-foreground">
+                    View All Projects
+                  </span>
+                  <svg
+                    className="w-4 h-4 text-foreground/60 group-hover:translate-x-1 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </Link>
+              </div>
             </motion.div>
           </div>
         </div>
