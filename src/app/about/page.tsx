@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
+import { ContactCTA } from '@/components/sections/ContactCTA';
 
 // Bio sections - each section triggers a new image and background color
 const BIO_SECTIONS = [
@@ -68,16 +69,18 @@ export default function AboutPage() {
     TEXT_COLORS
   );
 
-  // Image opacities - each image fades in/out at specific scroll positions
-  const image1Opacity = useTransform(scrollYProgress, [0, 0.15, 0.2], [1, 1, 0]);
-  const image2Opacity = useTransform(scrollYProgress, [0.15, 0.2, 0.35, 0.4], [0, 1, 1, 0]);
-  const image3Opacity = useTransform(scrollYProgress, [0.35, 0.4, 0.55, 0.6], [0, 1, 1, 0]);
-  const image4Opacity = useTransform(scrollYProgress, [0.55, 0.6, 0.75, 0.8], [0, 1, 1, 0]);
-  const image5Opacity = useTransform(scrollYProgress, [0.75, 0.8, 1], [0, 1, 1]);
+  // Image opacities - very slow, smooth transitions spread across entire scroll
+  // 5 images, each visible for ~25%, with very long 12% crossfades
+  const image1Opacity = useTransform(scrollYProgress, [0, 0.20, 0.32], [1, 1, 0]);
+  const image2Opacity = useTransform(scrollYProgress, [0.20, 0.32, 0.44, 0.56], [0, 1, 1, 0]);
+  const image3Opacity = useTransform(scrollYProgress, [0.44, 0.56, 0.68, 0.80], [0, 1, 1, 0]);
+  const image4Opacity = useTransform(scrollYProgress, [0.68, 0.80, 0.88, 0.95], [0, 1, 1, 0]);
+  const image5Opacity = useTransform(scrollYProgress, [0.88, 0.95, 1], [0, 1, 1]); // Stays visible through end
 
   const imageOpacities = [image1Opacity, image2Opacity, image3Opacity, image4Opacity, image5Opacity];
 
   return (
+    <>
     <motion.div
       ref={containerRef}
       className="relative"
@@ -95,14 +98,14 @@ export default function AboutPage() {
           </motion.span>
 
           {/* Bio Sections - these scroll naturally */}
-          <div className="space-y-0">
+          <div>
             {BIO_SECTIONS.map((section, index) => (
               <motion.div
                 key={section.id}
-                className="min-h-[80vh] flex items-start pt-8 first:pt-0"
+                className="min-h-[45vh] sm:min-h-[55vh] lg:min-h-[80vh] flex items-start pb-16 sm:pb-20 lg:pb-24"
               >
                 <motion.p
-                  className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-relaxed max-w-xl"
+                  className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-relaxed max-w-xl drop-shadow-sm lg:drop-shadow-none"
                   style={{ color: textColor }}
                 >
                   {section.text}
@@ -111,8 +114,8 @@ export default function AboutPage() {
             ))}
           </div>
 
-          {/* Bottom spacer */}
-          <div className="h-[20vh]" />
+          {/* Bottom spacer - larger on mobile to keep image visible longer */}
+          <div className="h-[25vh] sm:h-[20vh] lg:h-[20vh]" />
         </div>
 
         {/* Right Column - Fixed Image Frame */}
@@ -145,7 +148,7 @@ export default function AboutPage() {
         <motion.div
           className="lg:hidden fixed top-24 right-4 sm:right-6 md:right-8 z-0 flex items-start justify-end"
           style={{
-            opacity: useTransform(scrollYProgress, [0.92, 0.98], [0.4, 0])
+            opacity: useTransform(scrollYProgress, [0.97, 1], [0.7, 0])
           }}
         >
           <div className="relative w-[200px] h-[200px] sm:w-[240px] sm:h-[240px] md:w-[360px] md:h-[360px] rounded-2xl overflow-hidden">
@@ -170,5 +173,9 @@ export default function AboutPage() {
       </div>
 
     </motion.div>
+
+      {/* Contact CTA Section */}
+      <ContactCTA />
+    </>
   );
 }
