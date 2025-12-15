@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { LogoIntro } from '@/components/intro/LogoIntro';
 import { ProjectsShowcase } from '@/components/sections/ProjectsShowcase';
+import { ContactCTA } from '@/components/sections/ContactCTA';
 
 const ROTATING_WORDS = ['experience', 'websites', 'illustration', 'brands'];
 const WORD_DISPLAY_TIME = 2500; // 2.5 seconds per word
@@ -103,6 +104,9 @@ export default function Home() {
 
           {/* Projects showcase section */}
           <ProjectsShowcase />
+
+          {/* Contact CTA section */}
+          <ContactCTA />
         </>
       )}
     </>
