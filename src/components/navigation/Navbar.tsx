@@ -6,13 +6,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 interface LogoProps {
   color: string;
+  onClick?: () => void;
 }
 
-const Logo = ({ color }: LogoProps) => {
+const Logo = ({ color, onClick }: LogoProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <Link href="/">
+    <Link href="/" onClick={onClick}>
       <motion.div
         className="relative"
         onMouseEnter={() => setIsHovered(true)}
@@ -161,7 +162,7 @@ export function Navbar() {
       {/* Main Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-[60] px-4 py-4 sm:px-6 sm:py-5 md:px-8 md:py-6">
         <div className="flex items-center justify-between">
-          <Logo color={navColor} />
+          <Logo color={navColor} onClick={() => setIsMenuOpen(false)} />
 
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -246,6 +247,7 @@ export function Navbar() {
         href="/about"
         className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 z-50 font-body text-base sm:text-lg hover:opacity-80"
         style={{ color: aboutColor, transition: 'color 0.3s ease, opacity 0.3s ease' }}
+        onClick={() => setIsMenuOpen(false)}
       >
         About
       </Link>
