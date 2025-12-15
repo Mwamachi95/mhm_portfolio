@@ -82,8 +82,10 @@ export function Navbar() {
   const [isAboutOverFooter, setIsAboutOverFooter] = useState(false);
 
   const navLinks = [
-    { name: 'Websites', href: '/websites' },
-    { name: 'Illustrations', href: '/illustrations' },
+    { name: 'Projects', href: '/websites', isParent: true },
+    { name: 'Websites', href: '/websites', isChild: true },
+    { name: 'Illustrations', href: '/illustrations', isChild: true },
+    { name: 'Branding', href: '/branding', isChild: true },
     { name: 'Ideas', href: '/ideas' },
     { name: 'divider', href: '#' },
     { name: 'Contact', href: '/contact' },
@@ -204,6 +206,8 @@ export function Navbar() {
                     );
                   }
 
+                  const isChild = 'isChild' in link && link.isChild;
+
                   return (
                     <motion.div
                       key={link.name}
@@ -214,10 +218,11 @@ export function Navbar() {
                         delay: 0.6 + index * 0.1,
                         ease: [0.25, 0.46, 0.45, 0.94],
                       }}
+                      className={isChild ? 'pl-6 sm:pl-8 md:pl-10' : ''}
                     >
                       <Link
                         href={link.href}
-                        className="block font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-foreground transition-opacity duration-300"
+                        className={`block font-display font-semibold text-foreground transition-opacity duration-300 ${isChild ? 'text-xl sm:text-2xl md:text-3xl lg:text-4xl' : 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl'}`}
                         style={{
                           opacity: hoveredLink === null || hoveredLink === link.name ? 1 : 0.4,
                         }}
