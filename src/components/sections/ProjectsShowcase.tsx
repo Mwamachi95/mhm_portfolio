@@ -42,38 +42,114 @@ const CARD_COLORS = [
   'from-pink-500/20 to-purple-500/20',
 ];
 
-// Simplified fallback layout for mobile/tablet
+// Improved fallback layout for mobile/tablet with swipeable carousel
 function ProjectsShowcaseFallback() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  // Handle scroll to update active index for pagination dots
+  const handleScroll = () => {
+    if (carouselRef.current) {
+      const scrollLeft = carouselRef.current.scrollLeft;
+      const cardWidth = carouselRef.current.offsetWidth * 0.85; // 85vw card width
+      const newIndex = Math.round(scrollLeft / cardWidth);
+      setActiveIndex(Math.min(newIndex, PLACEHOLDER_PROJECTS.length - 1));
+    }
+  };
+
   return (
-    <section className="bg-background py-16 md:py-20">
-      <div className="w-full px-8">
+    <section className="bg-background py-16 md:py-24">
+      <div className="w-full">
         {/* Section title */}
-        <h2 className="font-display text-[12vw] md:text-[10vw] font-bold text-foreground leading-none mb-8 md:mb-12">
+        <h2 className="font-display text-[14vw] sm:text-[12vw] md:text-[10vw] font-bold text-foreground leading-none mb-6 md:mb-10 px-6 sm:px-8">
           projects
         </h2>
 
-        {/* Project Card */}
-        <div className="w-full max-w-lg h-[60vh] bg-muted/20 rounded-lg overflow-hidden border border-border/50 relative">
-          {/* Placeholder image area */}
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-muted/30 to-muted/10">
-            <span className="font-display text-4xl md:text-5xl font-semibold text-muted-foreground/30">
-              {PLACEHOLDER_PROJECTS[0].title}
-            </span>
-          </div>
+        {/* Swipeable Carousel */}
+        <div
+          ref={carouselRef}
+          onScroll={handleScroll}
+          className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 px-6 sm:px-8"
+          style={{
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            WebkitOverflowScrolling: 'touch',
+          }}
+        >
+          {PLACEHOLDER_PROJECTS.map((project, index) => (
+            <div
+              key={project.id}
+              className="flex-shrink-0 snap-center w-[85vw] sm:w-[85vw] md:w-[80vw] h-[55vh] sm:h-[60vh] md:h-[65vh] bg-muted/20 rounded-xl overflow-hidden border border-border/50 relative"
+            >
+              {/* Placeholder image area */}
+              <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${CARD_COLORS[index]}`}>
+                <span className="font-display text-3xl sm:text-4xl md:text-5xl font-semibold text-muted-foreground/30">
+                  {project.title}
+                </span>
+              </div>
 
-          {/* Category badge */}
-          <div className="absolute top-4 left-4 md:top-6 md:left-6">
-            <span className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-background/80 backdrop-blur-sm border border-border/50 rounded-full text-xs md:text-sm font-medium text-foreground">
-              {PLACEHOLDER_PROJECTS[0].category}
-            </span>
-          </div>
+              {/* Category badge */}
+              <div className="absolute top-4 left-4 sm:top-5 sm:left-5 md:top-6 md:left-6">
+                <span className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-background/80 backdrop-blur-sm border border-border/50 rounded-full text-xs md:text-sm font-medium text-foreground">
+                  {project.category}
+                </span>
+              </div>
 
-          {/* Title overlay at bottom */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-gradient-to-t from-background/90 to-transparent">
-            <h3 className="font-display text-xl md:text-2xl font-semibold text-foreground">
-              {PLACEHOLDER_PROJECTS[0].title}
-            </h3>
-          </div>
+              {/* Title overlay at bottom */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 md:p-6 bg-gradient-to-t from-background/90 to-transparent">
+                <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-semibold text-foreground">
+                  {project.title}
+                </h3>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Pagination Dots */}
+        <div className="flex justify-center gap-2 mt-6 px-6 sm:px-8">
+          {PLACEHOLDER_PROJECTS.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                if (carouselRef.current) {
+                  const cardWidth = carouselRef.current.offsetWidth * 0.85;
+                  carouselRef.current.scrollTo({
+                    left: cardWidth * index,
+                    behavior: 'smooth',
+                  });
+                }
+              }}
+              className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-colors ${
+                activeIndex === index ? 'bg-foreground' : 'bg-border'
+              }`}
+              aria-label={`Go to project ${index + 1}`}
+            />
+          ))}
+        </div>
+
+        {/* View All Projects Button (visible below carousel) */}
+        <div className="flex justify-start mt-8 px-6 sm:px-8">
+          <Link
+            href="/websites"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-border/50 bg-background hover:bg-muted/20 transition-colors group"
+          >
+            <span className="font-medium text-sm text-foreground">
+              View All Projects
+            </span>
+            <svg
+              className="w-4 h-4 text-foreground/60 group-hover:translate-x-1 transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
+            </svg>
+          </Link>
         </div>
       </div>
     </section>
