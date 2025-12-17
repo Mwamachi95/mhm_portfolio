@@ -3,36 +3,28 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useMotionTemplate } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
+import { urlFor } from '@/lib/sanity';
+
+interface SanityImage {
+  _type: 'image';
+  asset: {
+    _ref: string;
+    _type: 'reference';
+  };
+  alt?: string;
+}
 
 interface ProjectCard {
   id: string;
   title: string;
   category: string;
-  image?: string;
+  thumbnail?: SanityImage;
 }
 
-const PLACEHOLDER_PROJECTS: ProjectCard[] = [
-  {
-    id: '1',
-    title: 'Project 1',
-    category: 'Websites',
-  },
-  {
-    id: '2',
-    title: 'Project 2',
-    category: 'Mobile Apps',
-  },
-  {
-    id: '3',
-    title: 'Project 3',
-    category: 'Branding',
-  },
-  {
-    id: '4',
-    title: 'Project 4',
-    category: 'Illustrations',
-  },
-];
+interface ProjectsShowcaseProps {
+  projects: ProjectCard[];
+}
 
 // Card colors for visual distinction
 const CARD_COLORS = [
@@ -43,7 +35,7 @@ const CARD_COLORS = [
 ];
 
 // Improved fallback layout for mobile/tablet with swipeable carousel
-function ProjectsShowcaseFallback() {
+function ProjectsShowcaseFallback({ projects }: { projects: ProjectCard[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
 
@@ -53,7 +45,7 @@ function ProjectsShowcaseFallback() {
       const scrollLeft = carouselRef.current.scrollLeft;
       const cardWidth = carouselRef.current.offsetWidth * 0.85; // 85vw card width
       const newIndex = Math.round(scrollLeft / cardWidth);
-      setActiveIndex(Math.min(newIndex, PLACEHOLDER_PROJECTS.length - 1));
+      setActiveIndex(Math.min(newIndex, projects.length - 1));
     }
   };
 
@@ -76,27 +68,40 @@ function ProjectsShowcaseFallback() {
             WebkitOverflowScrolling: 'touch',
           }}
         >
-          {PLACEHOLDER_PROJECTS.map((project, index) => (
+          {projects.map((project, index) => (
             <div
               key={project.id}
               className="flex-shrink-0 snap-center w-[85vw] sm:w-[85vw] md:w-[80vw] h-[55vh] sm:h-[60vh] md:h-[65vh] bg-muted/20 rounded-xl overflow-hidden border border-border/50 relative"
             >
-              {/* Placeholder image area */}
-              <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${CARD_COLORS[index]}`}>
-                <span className="font-display text-3xl sm:text-4xl md:text-5xl font-semibold text-muted-foreground/30">
-                  {project.title}
-                </span>
-              </div>
+              {/* Image area - real image for first card if available, gradient placeholder otherwise */}
+              {project.thumbnail ? (
+                <div className="absolute inset-0 z-0">
+                  <Image
+                    src={urlFor(project.thumbnail).width(1200).height(800).auto('format').url()}
+                    alt={project.thumbnail.alt || project.title}
+                    fill
+                    className="object-cover"
+                    sizes="85vw"
+                    unoptimized
+                  />
+                </div>
+              ) : (
+                <div className={`absolute inset-0 z-0 flex items-center justify-center bg-gradient-to-br ${CARD_COLORS[index]}`}>
+                  <span className="font-display text-3xl sm:text-4xl md:text-5xl font-semibold text-muted-foreground/30">
+                    {project.title}
+                  </span>
+                </div>
+              )}
 
               {/* Category badge */}
-              <div className="absolute top-4 left-4 sm:top-5 sm:left-5 md:top-6 md:left-6">
+              <div className="absolute top-4 left-4 sm:top-5 sm:left-5 md:top-6 md:left-6 z-10">
                 <span className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-background/80 backdrop-blur-sm border border-border/50 rounded-full text-xs md:text-sm font-medium text-foreground">
                   {project.category}
                 </span>
               </div>
 
               {/* Title overlay at bottom */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 md:p-6 bg-gradient-to-t from-background/90 to-transparent">
+              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 md:p-6 bg-gradient-to-t from-background/90 to-transparent z-10">
                 <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-semibold text-foreground">
                   {project.title}
                 </h3>
@@ -107,7 +112,7 @@ function ProjectsShowcaseFallback() {
 
         {/* Pagination Dots */}
         <div className="flex justify-center gap-2 mt-6 px-6 sm:px-8">
-          {PLACEHOLDER_PROJECTS.map((_, index) => (
+          {projects.map((_, index) => (
             <button
               key={index}
               onClick={() => {
@@ -157,7 +162,7 @@ function ProjectsShowcaseFallback() {
 }
 
 // Desktop animated version with carousel
-function ProjectsShowcaseDesktop() {
+function ProjectsShowcaseDesktop({ projects }: { projects: ProjectCard[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -176,7 +181,7 @@ function ProjectsShowcaseDesktop() {
   const cardWidth = 35; // vw - standard card width
   const expandedWidth = 75; // vw - expanded card in focus
   const gap = 4; // vw - gap between cards
-  const numCards = PLACEHOLDER_PROJECTS.length;
+  const numCards = projects.length;
 
   // Timeline: Each card gets equal time for its expand/retract/exit cycle
   // Phase 2 starts at 0.33, ends at 1.0 (0.67 duration)
@@ -301,7 +306,7 @@ function ProjectsShowcaseDesktop() {
                 x: rowTranslate
               }}
             >
-              {PLACEHOLDER_PROJECTS.map((project, index) => (
+              {projects.map((project, index) => (
                 <motion.div
                   key={project.id}
                   className="relative h-full flex-shrink-0 rounded-lg overflow-hidden border border-border/50"
@@ -309,22 +314,35 @@ function ProjectsShowcaseDesktop() {
                     width: cardWidths[index]
                   }}
                 >
-                  {/* Card background */}
-                  <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${CARD_COLORS[index]}`}>
-                    <span className="font-display text-4xl md:text-5xl font-semibold text-muted-foreground/30">
-                      {project.title}
-                    </span>
-                  </div>
+                  {/* Card background - real image if available, gradient placeholder otherwise */}
+                  {project.thumbnail ? (
+                    <div className="absolute inset-0 z-0">
+                      <Image
+                        src={urlFor(project.thumbnail).width(1200).height(900).auto('format').url()}
+                        alt={project.thumbnail.alt || project.title}
+                        fill
+                        className="object-cover"
+                        sizes="75vw"
+                        unoptimized
+                      />
+                    </div>
+                  ) : (
+                    <div className={`absolute inset-0 z-0 flex items-center justify-center bg-gradient-to-br ${CARD_COLORS[index]}`}>
+                      <span className="font-display text-4xl md:text-5xl font-semibold text-muted-foreground/30">
+                        {project.title}
+                      </span>
+                    </div>
+                  )}
 
                   {/* Category badge */}
-                  <div className="absolute top-4 left-4 md:top-6 md:left-6">
+                  <div className="absolute top-4 left-4 md:top-6 md:left-6 z-10">
                     <span className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-background/80 backdrop-blur-sm border border-border/50 rounded-full text-xs md:text-sm font-medium text-foreground">
                       {project.category}
                     </span>
                   </div>
 
                   {/* Title overlay at bottom */}
-                  <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-gradient-to-t from-background/90 to-transparent">
+                  <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-gradient-to-t from-background/90 to-transparent z-10">
                     <h3 className="font-display text-xl md:text-2xl font-semibold text-foreground">
                       {project.title}
                     </h3>
@@ -365,7 +383,7 @@ function ProjectsShowcaseDesktop() {
 }
 
 // Main export - switches between fallback and desktop based on screen size
-export function ProjectsShowcase() {
+export function ProjectsShowcase({ projects }: ProjectsShowcaseProps) {
   const [isDesktop, setIsDesktop] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -385,5 +403,5 @@ export function ProjectsShowcase() {
     return null;
   }
 
-  return isDesktop ? <ProjectsShowcaseDesktop /> : <ProjectsShowcaseFallback />;
+  return isDesktop ? <ProjectsShowcaseDesktop projects={projects} /> : <ProjectsShowcaseFallback projects={projects} />;
 }
