@@ -18,6 +18,7 @@ interface SanityImage {
 interface ProjectCard {
   id: string;
   title: string;
+  slug: string;
   category: string;
   thumbnail?: SanityImage;
 }
@@ -69,9 +70,11 @@ function ProjectsShowcaseFallback({ projects }: { projects: ProjectCard[] }) {
           }}
         >
           {projects.map((project, index) => (
-            <div
+            <Link
               key={project.id}
-              className="flex-shrink-0 snap-center w-[85vw] sm:w-[85vw] md:w-[80vw] h-[55vh] sm:h-[60vh] md:h-[65vh] bg-muted/20 rounded-xl overflow-hidden border border-border/50 relative"
+              href={`/projects/${project.slug}`}
+              className="flex-shrink-0 snap-center w-[85vw] sm:w-[85vw] md:w-[80vw] h-[55vh] sm:h-[60vh] md:h-[65vh] bg-muted/20 rounded-xl overflow-hidden border border-border/50 relative group"
+              data-cursor="view"
             >
               {/* Image area - real image for first card if available, gradient placeholder otherwise */}
               {project.thumbnail ? (
@@ -80,7 +83,7 @@ function ProjectsShowcaseFallback({ projects }: { projects: ProjectCard[] }) {
                     src={urlFor(project.thumbnail).width(1200).height(800).auto('format').url()}
                     alt={project.thumbnail.alt || project.title}
                     fill
-                    className="object-cover"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="85vw"
                     unoptimized
                   />
@@ -106,7 +109,7 @@ function ProjectsShowcaseFallback({ projects }: { projects: ProjectCard[] }) {
                   {project.title}
                 </h3>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
@@ -309,11 +312,19 @@ function ProjectsShowcaseDesktop({ projects }: { projects: ProjectCard[] }) {
               {projects.map((project, index) => (
                 <motion.div
                   key={project.id}
-                  className="relative h-full flex-shrink-0 rounded-lg overflow-hidden border border-border/50"
+                  className="relative h-full flex-shrink-0 rounded-lg overflow-hidden border border-border/50 group"
                   style={{
                     width: cardWidths[index]
                   }}
+                  data-cursor="view"
                 >
+                  {/* Clickable overlay link */}
+                  <Link
+                    href={`/projects/${project.slug}`}
+                    className="absolute inset-0 z-20"
+                    aria-label={`View ${project.title} project`}
+                  />
+
                   {/* Card background - real image if available, gradient placeholder otherwise */}
                   {project.thumbnail ? (
                     <div className="absolute inset-0 z-0">
@@ -321,7 +332,7 @@ function ProjectsShowcaseDesktop({ projects }: { projects: ProjectCard[] }) {
                         src={urlFor(project.thumbnail).width(1200).height(900).auto('format').url()}
                         alt={project.thumbnail.alt || project.title}
                         fill
-                        className="object-cover"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="75vw"
                         unoptimized
                       />

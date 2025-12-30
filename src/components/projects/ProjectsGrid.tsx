@@ -122,6 +122,7 @@ function ProjectCardGrid({ project, index }: { project: Project; index: number }
       animate="visible"
       exit="exit"
       className="group"
+      data-cursor="view"
     >
       <Link href={`/projects/${project.slug}`} className="block">
         <div className="relative aspect-[4/3] rounded-lg overflow-hidden border border-border/50 bg-muted/20">
@@ -170,6 +171,7 @@ function ProjectCardRow({ project }: { project: Project }) {
       animate="visible"
       exit="exit"
       className="group"
+      data-cursor="view"
     >
       <Link href={`/projects/${project.slug}`} className="block">
         <div className="flex gap-6 p-4 rounded-lg border border-border/50 bg-muted/10 hover:bg-muted/20 transition-colors">

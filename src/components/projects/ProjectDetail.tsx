@@ -284,6 +284,7 @@ function ImageViewer({
           <motion.div
             className="absolute inset-0 bg-black/90"
             onClick={onClose}
+            data-cursor="close"
           />
 
           {/* Close button */}
@@ -457,6 +458,7 @@ function GalleryThumbnail({
       onClick={onClick}
       className="group relative aspect-[4/3] rounded-lg overflow-hidden cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
       aria-label={`View ${image.alt || `image ${index + 1}`} in fullscreen`}
+      data-cursor="open"
     >
       <Image
         src={urlFor(image).width(600).height(450).auto('format').url()}

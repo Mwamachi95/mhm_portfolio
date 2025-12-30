@@ -4,6 +4,7 @@ import "./globals.css";
 import { SmoothScrollProvider } from "@/components/smooth-scroll-provider";
 import { Navbar } from "@/components/navigation/Navbar";
 import { Footer } from "@/components/navigation/Footer";
+import { CustomCursor } from "@/components/ui/CustomCursor";
 
 const fontDisplay = Syne({
   variable: "--font-display",
@@ -45,6 +46,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <SmoothScrollProvider>
+          <CustomCursor />
           <Navbar />
           {children}
           <Footer />

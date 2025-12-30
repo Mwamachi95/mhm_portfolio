@@ -150,3 +150,30 @@
   }
 }
 
+/* Custom Cursor Styles */
+@layer components {
+  /* Hide default cursor on elements with data-cursor attribute (desktop only) */
+  @media (pointer: fine) {
+    [data-cursor] {
+      cursor: none;
+    }
+
+    /* Also hide cursor on children of data-cursor elements */
+    [data-cursor] * {
+      cursor: none;
+    }
+
+    /* Ensure cursor stays hidden when hovering interactive children */
+    [data-cursor] a,
+    [data-cursor] button {
+      cursor: none;
+    }
+  }
+
+  /* Ensure custom cursor element has GPU acceleration */
+  .custom-cursor {
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+}
+
