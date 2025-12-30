@@ -83,11 +83,11 @@ export function Navbar() {
   const [isAboutOverFooter, setIsAboutOverFooter] = useState(false);
 
   const navLinks = [
-    { name: 'Projects', href: '/websites', isParent: true },
-    { name: 'Websites', href: '/websites', isChild: true },
-    { name: 'Illustrations', href: '/illustrations', isChild: true },
-    { name: 'Branding', href: '/branding', isChild: true },
-    { name: 'Ideas', href: '/ideas' },
+    { name: 'Projects', href: '/projects', isParent: true },
+    { name: 'Websites', href: '/projects?category=websites', isChild: true },
+    { name: 'Illustration', href: '/projects?category=illustration', isChild: true },
+    { name: 'Branding', href: '/projects?category=branding', isChild: true },
+    { name: 'Ideas', href: '/projects?category=ideas' },
     { name: 'divider', href: '#' },
     { name: 'Contact', href: '/contact' },
   ];
@@ -160,7 +160,7 @@ export function Navbar() {
   return (
     <>
       {/* Main Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-[60] px-4 py-4 sm:px-6 sm:py-5 md:px-8 md:py-6">
+      <nav className="fixed top-0 left-0 right-0 z-[60] px-6 py-4 sm:px-8 sm:py-5 md:px-12 md:py-6 lg:px-16">
         <div className="flex items-center justify-between">
           <Logo color={navColor} onClick={() => setIsMenuOpen(false)} />
 
@@ -245,7 +245,7 @@ export function Navbar() {
       {/* About Link - Fixed Bottom Right */}
       <Link
         href="/about"
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 z-50 font-body text-base sm:text-lg hover:opacity-80"
+        className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 md:bottom-10 md:right-12 lg:right-16 z-50 font-body text-base sm:text-lg hover:opacity-80"
         style={{ color: aboutColor, transition: 'color 0.3s ease, opacity 0.3s ease' }}
         onClick={() => setIsMenuOpen(false)}
       >

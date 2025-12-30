@@ -74,7 +74,7 @@ export function HomeContent({ projectsShowcase }: HomeContentProps) {
         <>
           {/* Hero section */}
           <motion.section
-            className="flex min-h-screen items-end justify-center px-8 pb-32 sm:pb-40 md:pb-48"
+            className="flex min-h-screen items-end justify-center px-6 sm:px-8 md:px-12 lg:px-16 pb-32 sm:pb-40 md:pb-48"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}

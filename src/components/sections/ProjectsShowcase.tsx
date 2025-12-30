@@ -53,7 +53,7 @@ function ProjectsShowcaseFallback({ projects }: { projects: ProjectCard[] }) {
     <section className="bg-background py-16 md:py-24">
       <div className="w-full">
         {/* Section title */}
-        <h2 className="font-display text-[14vw] sm:text-[12vw] md:text-[10vw] font-bold text-foreground leading-none mb-6 md:mb-10 px-6 sm:px-8">
+        <h2 className="font-display text-[14vw] sm:text-[12vw] md:text-[10vw] font-bold text-foreground leading-none mb-6 md:mb-10 px-6 sm:px-8 md:px-12 lg:px-16">
           projects
         </h2>
 
@@ -61,7 +61,7 @@ function ProjectsShowcaseFallback({ projects }: { projects: ProjectCard[] }) {
         <div
           ref={carouselRef}
           onScroll={handleScroll}
-          className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 px-6 sm:px-8"
+          className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 px-6 sm:px-8 md:px-12 lg:px-16"
           style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
@@ -111,7 +111,7 @@ function ProjectsShowcaseFallback({ projects }: { projects: ProjectCard[] }) {
         </div>
 
         {/* Pagination Dots */}
-        <div className="flex justify-center gap-2 mt-6 px-6 sm:px-8">
+        <div className="flex justify-center gap-2 mt-6 px-6 sm:px-8 md:px-12 lg:px-16">
           {projects.map((_, index) => (
             <button
               key={index}
@@ -133,9 +133,9 @@ function ProjectsShowcaseFallback({ projects }: { projects: ProjectCard[] }) {
         </div>
 
         {/* View All Projects Button (visible below carousel) */}
-        <div className="flex justify-start mt-8 px-6 sm:px-8">
+        <div className="flex justify-start mt-8 px-6 sm:px-8 md:px-12 lg:px-16">
           <Link
-            href="/websites"
+            href="/projects"
             className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-border/50 bg-background hover:bg-muted/20 transition-colors group"
           >
             <span className="font-medium text-sm text-foreground">
@@ -284,7 +284,7 @@ function ProjectsShowcaseDesktop({ projects }: { projects: ProjectCard[] }) {
     >
       {/* Sticky container */}
       <div className="sticky top-0 h-screen w-full flex items-end overflow-hidden">
-        <div className="w-full px-8 pb-24">
+        <div className="w-full px-6 sm:px-8 md:px-12 lg:px-16 pb-24">
           <div className="relative overflow-x-clip overflow-y-visible">
             {/* "projects" text - scales down */}
             <motion.h2
@@ -353,7 +353,7 @@ function ProjectsShowcaseDesktop({ projects }: { projects: ProjectCard[] }) {
               {/* View All Projects button */}
               <div className="flex-shrink-0 h-full flex items-end">
                 <Link
-                  href="/websites"
+                  href="/projects"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border/50 bg-background/80 backdrop-blur-sm hover:bg-muted/20 transition-colors group"
                 >
                   <span className="font-medium text-sm text-foreground">

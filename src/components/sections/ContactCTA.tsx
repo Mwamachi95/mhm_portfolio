@@ -36,7 +36,7 @@ export function ContactCTA() {
 
   return (
     <section className="bg-background py-20 md:py-32 lg:py-40">
-      <div className="w-full px-8 md:px-12 lg:px-16">
+      <div className="w-full px-6 sm:px-8 md:px-12 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
           {/* Left Column - Text Content */}
           <div className="flex flex-col justify-start">

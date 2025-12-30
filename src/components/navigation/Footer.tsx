@@ -6,7 +6,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full min-h-screen bg-dark-bg flex items-end px-4 sm:px-6 md:px-8 pb-12 sm:pb-16 md:pb-20 pt-12 sm:pt-14 md:pt-16">
+    <footer className="w-full min-h-screen bg-dark-bg flex items-end px-6 sm:px-8 md:px-12 lg:px-16 pb-12 sm:pb-16 md:pb-20 pt-12 sm:pt-14 md:pt-16">
       <div className="w-full max-w-fit">
         {/* Two Columns: Contact and Social Media */}
         <div className="flex flex-col sm:flex-row gap-8 sm:gap-12 md:gap-16 lg:gap-20">
