@@ -5,6 +5,7 @@ import { SmoothScrollProvider } from "@/components/smooth-scroll-provider";
 import { Navbar } from "@/components/navigation/Navbar";
 import { Footer } from "@/components/navigation/Footer";
 import { CustomCursor } from "@/components/ui/CustomCursor";
+import { BackToTop } from "@/components/navigation/BackToTop";
 
 const fontDisplay = Syne({
   variable: "--font-display",
@@ -47,6 +48,7 @@ export default function RootLayout({
       >
         <SmoothScrollProvider>
           <CustomCursor />
+          <BackToTop />
           <Navbar />
           {children}
           <Footer />
