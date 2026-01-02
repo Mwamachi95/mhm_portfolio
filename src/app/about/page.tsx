@@ -13,7 +13,7 @@ const BIO_SECTIONS = [
   },
   {
     id: 2,
-    text: "I've recently transitioned into brand experience and website design, bringing my architectural sensibility—attention to detail, systematic thinking, and spatial awareness—into the digital realm. Each project is a new opportunity to learn and push my craft forward.",
+    text: "I've recently transitioned into brand experience and website design, bringing my architectural sensibility, attention to detail, systematic thinking, and spatial awareness, into the digital realm. Each project is a new opportunity to learn and push my craft forward.",
   },
   {
     id: 3,
