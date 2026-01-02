@@ -17,7 +17,7 @@ const BIO_SECTIONS = [
   },
   {
     id: 3,
-    text: "My approach blends strategic thinking with creative intuition. I believe great design isn't just about aesthetics—it's about solving problems and creating meaningful connections between brands and their audiences.",
+    text: "My approach blends strategic thinking with creative intuition. I believe great design isn't just about aesthetics, it's about solving problems and creating meaningful connections between brands and their audiences.",
   },
   {
     id: 4,
