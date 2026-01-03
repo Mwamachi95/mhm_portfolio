@@ -38,13 +38,17 @@ export function Footer() {
               </h3>
               <div className="flex flex-col gap-1.5 sm:gap-2 md:gap-3">
                 <a
-                  href="#"
+                  href="https://www.instagram.com/mhm_design.lab/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="link-underline font-body text-dark-fg text-base sm:text-lg md:text-xl lg:text-2xl font-normal"
                 >
                   Instagram
                 </a>
                 <a
-                  href="#"
+                  href="https://www.linkedin.com/in/heinz-mwamburi-6a5238229/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="link-underline font-body text-dark-fg text-base sm:text-lg md:text-xl lg:text-2xl font-normal"
                 >
                   LinkedIn
