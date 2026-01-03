@@ -66,7 +66,7 @@ export function HomeContent({ projectsShowcase }: HomeContentProps) {
 
       {/* White background pause between intro and hero */}
       {!showIntro && !showHero && (
-        <div className="fixed inset-0 bg-background" />
+        <div className="fixed inset-0 bg-background z-[99]" />
       )}
 
       {/* Main content */}
