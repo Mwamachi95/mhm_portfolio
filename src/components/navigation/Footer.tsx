@@ -15,16 +15,16 @@ export function Footer() {
               <h3 className="font-body text-dark-fg text-sm sm:text-base md:text-lg lg:text-xl font-bold uppercase tracking-wide">
                 Contact
               </h3>
-              <div className="space-y-1.5 sm:space-y-2 md:space-y-3">
+              <div className="flex flex-col gap-1.5 sm:gap-2 md:gap-3">
                 <a
                   href="mailto:mwamachi.mwamburi@gmail.com"
-                  className="block font-body text-dark-fg text-base sm:text-lg md:text-xl lg:text-2xl font-normal hover:underline decoration-1 underline-offset-4 transition-all duration-300"
+                  className="link-underline font-body text-dark-fg text-base sm:text-lg md:text-xl lg:text-2xl font-normal"
                 >
                   mwamachi.mwamburi@gmail.com
                 </a>
                 <a
                   href="tel:+254712378654"
-                  className="block font-body text-dark-fg text-base sm:text-lg md:text-xl lg:text-2xl font-normal hover:underline decoration-1 underline-offset-4 transition-all duration-300"
+                  className="link-underline font-body text-dark-fg text-base sm:text-lg md:text-xl lg:text-2xl font-normal"
                 >
                   +254712378654
                 </a>
@@ -36,16 +36,16 @@ export function Footer() {
               <h3 className="font-body text-dark-fg text-sm sm:text-base md:text-lg lg:text-xl font-bold uppercase tracking-wide">
                 Social Media
               </h3>
-              <div className="space-y-1.5 sm:space-y-2 md:space-y-3">
+              <div className="flex flex-col gap-1.5 sm:gap-2 md:gap-3">
                 <a
                   href="#"
-                  className="block font-body text-dark-fg text-base sm:text-lg md:text-xl lg:text-2xl font-normal hover:underline decoration-1 underline-offset-4 transition-all duration-300"
+                  className="link-underline font-body text-dark-fg text-base sm:text-lg md:text-xl lg:text-2xl font-normal"
                 >
                   Instagram
                 </a>
                 <a
                   href="#"
-                  className="block font-body text-dark-fg text-base sm:text-lg md:text-xl lg:text-2xl font-normal hover:underline decoration-1 underline-offset-4 transition-all duration-300"
+                  className="link-underline font-body text-dark-fg text-base sm:text-lg md:text-xl lg:text-2xl font-normal"
                 >
                   LinkedIn
                 </a>

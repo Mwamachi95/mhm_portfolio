@@ -207,7 +207,7 @@ const portableTextComponents: PortableTextComponents = {
         href={value?.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-primary underline underline-offset-2 hover:opacity-80 transition-opacity"
+        className="link-underline text-primary"
       >
         {children}
       </a>
@@ -290,10 +290,10 @@ function ImageViewer({
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 md:top-6 md:right-6 z-10 p-2 text-white/80 hover:text-white transition-colors"
+            className="btn-overlay absolute top-4 right-4 md:top-6 md:right-6 z-10 p-2 rounded-full"
             aria-label="Close image viewer"
           >
-            <X className="w-6 h-6 md:w-8 md:h-8" />
+            <X className="w-6 h-6 md:w-8 md:h-8 btn-icon-animate" />
           </button>
 
           {/* Image counter */}
@@ -305,24 +305,20 @@ function ImageViewer({
           <button
             onClick={onPrevious}
             disabled={isFirst}
-            className={`absolute left-2 md:left-6 z-10 p-2 md:p-3 rounded-full bg-white/10 backdrop-blur-sm transition-all ${
-              isFirst ? 'opacity-30 cursor-not-allowed' : 'hover:bg-white/20 text-white/80 hover:text-white'
-            }`}
+            className="btn-overlay absolute left-2 md:left-6 z-10 p-2 md:p-3 rounded-full"
             aria-label="Previous image"
           >
-            <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
+            <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 btn-icon-animate" />
           </button>
 
           {/* Next button */}
           <button
             onClick={onNext}
             disabled={isLast}
-            className={`absolute right-2 md:right-6 z-10 p-2 md:p-3 rounded-full bg-white/10 backdrop-blur-sm transition-all ${
-              isLast ? 'opacity-30 cursor-not-allowed' : 'hover:bg-white/20 text-white/80 hover:text-white'
-            }`}
+            className="btn-overlay absolute right-2 md:right-6 z-10 p-2 md:p-3 rounded-full"
             aria-label="Next image"
           >
-            <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />
+            <ChevronRight className="w-6 h-6 md:w-8 md:h-8 btn-icon-animate" />
           </button>
 
           {/* Image container */}
@@ -770,10 +766,10 @@ export function ProjectDetail({ project, navigation }: ProjectDetailProps) {
               href={project.websiteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-body text-lg text-primary hover:opacity-80 transition-opacity"
+              className="link-underline inline-flex items-center gap-2 font-body text-lg text-primary"
             >
               View Live Site
-              <ArrowUpRight className="w-5 h-5" />
+              <ArrowUpRight className="w-5 h-5 btn-icon-animate" />
             </a>
           </div>
         </motion.section>

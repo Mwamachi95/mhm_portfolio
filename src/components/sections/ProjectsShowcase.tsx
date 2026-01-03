@@ -139,24 +139,12 @@ function ProjectsShowcaseFallback({ projects }: { projects: ProjectCard[] }) {
         <div className="flex justify-start mt-8 px-6 sm:px-8 md:px-12 lg:px-16">
           <Link
             href="/projects"
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-border/50 bg-background hover:bg-muted/20 transition-colors group"
+            className="btn-secondary inline-flex items-center gap-2 px-5 py-3 rounded-full border-border/50 bg-background"
           >
-            <span className="font-medium text-sm text-foreground">
+            <span className="font-medium text-sm">
               View All Projects
             </span>
-            <svg
-              className="w-4 h-4 text-foreground/60 group-hover:translate-x-1 transition-transform"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
+            <span className="btn-arrow text-foreground/60">→</span>
           </Link>
         </div>
       </div>
@@ -365,24 +353,12 @@ function ProjectsShowcaseDesktop({ projects }: { projects: ProjectCard[] }) {
               <div className="flex-shrink-0 h-full flex items-end">
                 <Link
                   href="/projects"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border/50 bg-background/80 backdrop-blur-sm hover:bg-muted/20 transition-colors group"
+                  className="btn-secondary inline-flex items-center gap-2 px-6 py-3 rounded-full border-border/50 bg-background/80 backdrop-blur-sm"
                 >
-                  <span className="font-medium text-sm text-foreground">
+                  <span className="font-medium text-sm">
                     View All Projects
                   </span>
-                  <svg
-                    className="w-4 h-4 text-foreground/60 group-hover:translate-x-1 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
+                  <span className="btn-arrow text-foreground/60">→</span>
                 </Link>
               </div>
             </motion.div>

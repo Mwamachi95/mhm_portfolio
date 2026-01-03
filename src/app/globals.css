@@ -175,5 +175,263 @@
     will-change: transform;
     backface-visibility: hidden;
   }
+
+  /* ========================================
+     BUTTON INTERACTION PATTERNS
+     ======================================== */
+
+  /* Pattern 1: Primary Button with Slide Overlay */
+  .btn-primary {
+    @apply relative overflow-hidden;
+    @apply bg-foreground text-background;
+    @apply transition-colors duration-300 ease-out;
+  }
+
+  .btn-primary::before {
+    content: '';
+    @apply absolute inset-0;
+    @apply bg-white/25;
+    @apply -translate-x-full;
+    @apply transition-transform duration-300 ease-out;
+  }
+
+  .btn-primary:hover::before {
+    @apply translate-x-0;
+  }
+
+  .btn-primary .btn-icon-animate {
+    @apply transition-transform duration-300 ease-out;
+  }
+
+  .btn-primary:hover .btn-icon-animate {
+    @apply translate-x-0.5 -translate-y-0.5;
+  }
+
+  .btn-primary:active {
+    @apply scale-[0.98];
+    transition: transform 0.1s ease;
+  }
+
+  .btn-primary:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+
+  /* Pattern 2: Secondary Button with Arrow Slide */
+  .btn-secondary {
+    @apply relative;
+    @apply bg-transparent border border-border text-foreground;
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .btn-secondary:hover {
+    @apply bg-border/20;
+  }
+
+  .btn-secondary:active {
+    @apply scale-[0.98];
+    transition: transform 0.1s ease;
+  }
+
+  .btn-secondary:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+
+  .btn-secondary .btn-arrow {
+    @apply transition-transform duration-300 ease-out;
+  }
+
+  .btn-secondary:hover .btn-arrow {
+    @apply translate-x-1;
+  }
+
+  /* Pattern 3: Text Link with Underline Expand */
+  .link-underline {
+    @apply relative;
+    @apply w-fit;
+    transition: opacity 0.1s ease;
+  }
+
+  .link-underline::after {
+    content: '';
+    @apply absolute left-0 h-px;
+    bottom: 0.1em;
+    width: 0;
+    @apply bg-current;
+    transition: width 0.25s ease-out;
+  }
+
+  .link-underline:hover::after {
+    width: 100%;
+  }
+
+  .link-underline .btn-icon-animate {
+    @apply transition-transform duration-300 ease-out;
+  }
+
+  .link-underline:hover .btn-icon-animate {
+    @apply translate-x-0.5 -translate-y-0.5;
+  }
+
+  .link-underline:active {
+    @apply opacity-80;
+  }
+
+  .link-underline:focus-visible {
+    @apply outline-1 outline-offset-2 outline-current;
+  }
+
+  /* Pattern 4: Overlay/Lightbox Button */
+  .btn-overlay {
+    @apply bg-white/10 text-white/80;
+    @apply backdrop-blur-sm;
+    transition: all 0.2s ease;
+  }
+
+  .btn-overlay:hover {
+    @apply bg-white/20 text-white;
+  }
+
+  .btn-overlay .btn-icon-animate {
+    @apply transition-transform duration-200 ease-out;
+  }
+
+  .btn-overlay:hover .btn-icon-animate {
+    @apply scale-110;
+  }
+
+  .btn-overlay:active {
+    @apply scale-95;
+    transition: transform 0.1s ease;
+  }
+
+  .btn-overlay:focus-visible {
+    @apply outline-2 outline-offset-2 outline-white;
+  }
+
+  .btn-overlay:disabled {
+    @apply opacity-30 cursor-not-allowed;
+  }
+
+  .btn-overlay:disabled:hover {
+    @apply bg-white/10 text-white/80;
+  }
+
+  .btn-overlay:disabled:hover .btn-icon-animate {
+    @apply scale-100;
+  }
+
+  /* Pattern 5: Filter Pills */
+  .btn-pill {
+    @apply relative;
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .btn-pill-inactive {
+    @apply bg-transparent border border-border text-foreground;
+  }
+
+  .btn-pill-inactive:hover {
+    @apply bg-border/20;
+  }
+
+  .btn-pill-active {
+    @apply bg-foreground text-background border-transparent;
+  }
+
+  .btn-pill-active::before {
+    content: '';
+    @apply absolute inset-0 rounded-full;
+    @apply bg-primary/10;
+    @apply opacity-0;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-pill-active:hover::before {
+    @apply opacity-100;
+  }
+
+  .btn-pill:active {
+    @apply scale-[0.98];
+    transition: transform 0.1s ease;
+  }
+
+  .btn-pill:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+
+  /* Pattern 6: Icon-Only Button */
+  .btn-icon {
+    transition: all 0.2s ease;
+  }
+
+  .btn-icon:hover {
+    @apply opacity-100;
+  }
+
+  .btn-icon .btn-icon-animate {
+    @apply transition-transform duration-200 ease-out;
+  }
+
+  .btn-icon:hover .btn-icon-animate {
+    @apply -translate-y-0.5;
+  }
+
+  .btn-icon:active {
+    @apply scale-95;
+    transition: transform 0.1s ease;
+  }
+
+  .btn-icon:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+
+  /* ========================================
+     REDUCED MOTION SUPPORT
+     ======================================== */
+  @media (prefers-reduced-motion: reduce) {
+    .btn-primary::before,
+    .btn-secondary .btn-arrow,
+    .link-underline::after,
+    .btn-icon-animate {
+      transition: none;
+    }
+
+    .btn-primary:hover::before {
+      @apply translate-x-0 opacity-100;
+    }
+
+    .btn-secondary:hover .btn-arrow {
+      @apply translate-x-0;
+    }
+
+    .link-underline:hover::after {
+      width: 100%;
+    }
+
+    /* Disable icon animations */
+    .btn-primary:hover .btn-icon-animate,
+    .link-underline:hover .btn-icon-animate,
+    .btn-overlay:hover .btn-icon-animate,
+    .btn-icon:hover .btn-icon-animate {
+      @apply translate-x-0 translate-y-0 scale-100;
+    }
+
+    .btn-primary:active,
+    .btn-secondary:active,
+    .btn-overlay:active,
+    .btn-pill:active,
+    .btn-icon:active {
+      @apply scale-100;
+    }
+
+    /* Use opacity changes instead of transforms */
+    .btn-primary:active,
+    .btn-secondary:active,
+    .btn-overlay:active,
+    .btn-pill:active,
+    .btn-icon:active {
+      @apply opacity-90;
+    }
+  }
 }
 

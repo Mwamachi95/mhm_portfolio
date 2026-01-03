@@ -359,26 +359,24 @@ export function ContactCTA() {
               </div>
 
               {/* Submit Button */}
-              <motion.button
+              <button
                 type="submit"
                 disabled={isSubmitting}
-                className="inline-flex items-center gap-3 px-8 py-4 bg-foreground text-background font-body text-sm uppercase tracking-widest rounded-full disabled:opacity-70 disabled:cursor-not-allowed"
-                whileHover={isSubmitting ? {} : { scale: 1.02 }}
-                whileTap={isSubmitting ? {} : { scale: 0.98 }}
+                className="btn-primary inline-flex items-center gap-3 px-8 py-4 font-body text-sm uppercase tracking-widest rounded-full disabled:opacity-70 disabled:cursor-not-allowed"
                 aria-disabled={isSubmitting}
               >
                 {isSubmitting ? (
                   <>
-                    Sending...
-                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span className="relative z-10">Sending...</span>
+                    <Loader2 className="relative z-10 w-5 h-5 animate-spin" />
                   </>
                 ) : (
                   <>
-                    Send Enquiry
-                    <ArrowUpRight className="w-5 h-5" />
+                    <span className="relative z-10">Send Enquiry</span>
+                    <ArrowUpRight className="relative z-10 w-5 h-5 btn-icon-animate" />
                   </>
                 )}
-              </motion.button>
+              </button>
             </form>
           </div>
         </div>

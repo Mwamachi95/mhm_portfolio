@@ -271,14 +271,14 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
                 <button
                   key={cat.value}
                   onClick={() => handleCategoryChange(cat.value)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  className={`btn-pill px-4 py-2 rounded-full text-sm font-medium ${
                     categoryParam === cat.value
-                      ? 'bg-foreground text-background'
-                      : 'bg-transparent border border-border text-foreground hover:bg-muted/20'
+                      ? 'btn-pill-active'
+                      : 'btn-pill-inactive'
                   }`}
                   aria-pressed={categoryParam === cat.value}
                 >
-                  {cat.label}
+                  <span className="relative z-10">{cat.label}</span>
                 </button>
               ))}
             </div>
@@ -287,7 +287,7 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
             <div className="hidden md:flex items-center gap-1 p-1 rounded-lg border border-border/50 bg-muted/10">
               <button
                 onClick={() => setLayout('grid')}
-                className={`p-2 rounded-md transition-colors ${
+                className={`btn-icon p-2 rounded-md ${
                   layout === 'grid' ? 'bg-background shadow-sm' : 'hover:bg-muted/20'
                 }`}
                 aria-label="Grid view"
@@ -297,7 +297,7 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
               </button>
               <button
                 onClick={() => setLayout('rows')}
-                className={`p-2 rounded-md transition-colors ${
+                className={`btn-icon p-2 rounded-md ${
                   layout === 'rows' ? 'bg-background shadow-sm' : 'hover:bg-muted/20'
                 }`}
                 aria-label="List view"
@@ -345,9 +345,9 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
               </p>
               <button
                 onClick={() => handleCategoryChange('all')}
-                className="px-4 py-2 rounded-full text-sm font-medium bg-foreground text-background hover:opacity-90 transition-opacity"
+                className="btn-primary px-4 py-2 rounded-full text-sm font-medium"
               >
-                View all projects
+                <span className="relative z-10">View all projects</span>
               </button>
             </motion.div>
           )}
