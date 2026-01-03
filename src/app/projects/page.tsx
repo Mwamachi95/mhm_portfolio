@@ -1,6 +1,16 @@
 import { Suspense } from 'react'
+import { Metadata } from 'next'
 import { client } from '@/lib/sanity'
 import { ProjectsGrid } from '@/components/projects/ProjectsGrid'
+
+export const metadata: Metadata = {
+  title: 'Projects',
+  description: 'Browse my portfolio of brand experience and website design work including websites, illustrations, and branding projects.',
+  openGraph: {
+    title: 'Projects',
+    description: 'Browse my portfolio of brand experience and website design work including websites, illustrations, and branding projects.',
+  },
+}
 
 interface SanityImage {
   _type: 'image'

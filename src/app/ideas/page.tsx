@@ -1,4 +1,13 @@
-'use client';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Ideas',
+  description: 'Explore creative concepts and experimental design ideas by Heinz Mwamachi.',
+  openGraph: {
+    title: 'Ideas',
+    description: 'Explore creative concepts and experimental design ideas by Heinz Mwamachi.',
+  },
+};
 
 export default function IdeasPage() {
   return (

@@ -123,12 +123,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       : undefined
 
   return {
-    title: `${project.title} | Mwamachi`,
-    description: project.description || `${project.title} - A ${project.category} project by Mwamachi`,
+    title: project.title,
+    description: project.description || `${project.title} - A ${project.category} project by Heinz Mwamachi`,
     openGraph: {
       title: project.title,
-      description: project.description || `${project.title} - A ${project.category} project by Mwamachi`,
+      description: project.description || `${project.title} - A ${project.category} project by Heinz Mwamachi`,
       images: heroImageUrl ? [{ url: heroImageUrl, width: 1200, height: 630 }] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: project.title,
+      description: project.description || `${project.title} - A ${project.category} project by Heinz Mwamachi`,
+      images: heroImageUrl ? [heroImageUrl] : [],
     },
   }
 }

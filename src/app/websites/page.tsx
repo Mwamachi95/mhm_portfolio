@@ -1,4 +1,13 @@
-'use client';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Websites',
+  description: 'Explore website design and development projects by Heinz Mwamachi.',
+  openGraph: {
+    title: 'Websites',
+    description: 'Explore website design and development projects by Heinz Mwamachi.',
+  },
+};
 
 export default function WebsitesPage() {
   return (
