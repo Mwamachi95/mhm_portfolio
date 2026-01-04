@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface LogoProps {
@@ -89,6 +90,27 @@ export function Navbar() {
   const [aboutColor, setAboutColor] = useState('rgb(80, 117, 121)'); // primary
   const [isNavOverFooter, setIsNavOverFooter] = useState(false);
   const [isAboutOverFooter, setIsAboutOverFooter] = useState(false);
+  const pathname = usePathname();
+
+  // Reset hoveredLink when menu closes
+  useEffect(() => {
+    if (!isMenuOpen) {
+      setHoveredLink(null);
+    }
+  }, [isMenuOpen]);
+
+  // Helper to check if a link is active
+  const isLinkActive = (href: string) => {
+    if (href === '/projects') {
+      // Projects link is active if on /projects or any /projects/* page
+      return pathname === '/projects' || pathname.startsWith('/projects/');
+    }
+    if (href.includes('?category=')) {
+      // Category links: check if current URL matches the category
+      return pathname === '/projects' && typeof window !== 'undefined' && window.location.search === href.replace('/projects', '');
+    }
+    return pathname === href;
+  };
 
   const navLinks = [
     { name: 'Projects', href: '/projects', isParent: true },
@@ -223,6 +245,8 @@ export function Navbar() {
 
                   const isChild = 'isChild' in link && link.isChild;
 
+                  const isActive = isLinkActive(link.href);
+
                   return (
                     <motion.div
                       key={link.name}
@@ -237,9 +261,9 @@ export function Navbar() {
                     >
                       <Link
                         href={link.href}
-                        className={`block font-display font-semibold text-foreground transition-opacity duration-300 ${isChild ? 'text-xl sm:text-2xl md:text-3xl lg:text-4xl' : 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl'}`}
+                        className={`block font-display font-semibold transition-opacity duration-300 ${isChild ? 'text-xl sm:text-2xl md:text-3xl lg:text-4xl' : 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl'} ${isActive ? 'text-primary' : 'text-foreground'}`}
                         style={{
-                          opacity: hoveredLink === null || hoveredLink === link.name ? 1 : 0.4,
+                          opacity: hoveredLink === null || hoveredLink === link.name || isActive ? 1 : 0.4,
                         }}
                         onMouseEnter={() => setHoveredLink(link.name)}
                         onMouseLeave={() => setHoveredLink(null)}
