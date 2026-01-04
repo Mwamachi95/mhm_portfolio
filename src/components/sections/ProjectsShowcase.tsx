@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useMotionTemplate } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { urlFor } from '@/lib/sanity';
 
 interface SanityImage {
@@ -113,26 +114,73 @@ function ProjectsShowcaseFallback({ projects }: { projects: ProjectCard[] }) {
           ))}
         </div>
 
-        {/* Pagination Dots */}
-        <div className="flex justify-center gap-2 mt-6 px-6 sm:px-8 md:px-12 lg:px-16">
-          {projects.map((_, index) => (
+        {/* Pagination Dots and Navigation Arrows */}
+        <div className="relative flex items-center justify-center mt-6 px-6 sm:px-8 md:px-12 lg:px-16">
+          {/* Pagination Dots - Centered */}
+          <div className="flex gap-2">
+            {projects.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  if (carouselRef.current) {
+                    const cardWidth = carouselRef.current.offsetWidth * 0.85;
+                    carouselRef.current.scrollTo({
+                      left: cardWidth * index,
+                      behavior: 'smooth',
+                    });
+                  }
+                }}
+                className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-colors ${
+                  activeIndex === index ? 'bg-foreground' : 'bg-border'
+                }`}
+                aria-label={`Go to project ${index + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Navigation Arrows - Right aligned */}
+          <div className="absolute right-6 sm:right-8 md:right-12 lg:right-16 flex gap-1">
             <button
-              key={index}
               onClick={() => {
-                if (carouselRef.current) {
+                if (carouselRef.current && activeIndex > 0) {
                   const cardWidth = carouselRef.current.offsetWidth * 0.85;
                   carouselRef.current.scrollTo({
-                    left: cardWidth * index,
+                    left: cardWidth * (activeIndex - 1),
                     behavior: 'smooth',
                   });
                 }
               }}
-              className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-colors ${
-                activeIndex === index ? 'bg-foreground' : 'bg-border'
+              disabled={activeIndex === 0}
+              className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-border/50 flex items-center justify-center transition-colors ${
+                activeIndex === 0
+                  ? 'opacity-40 cursor-not-allowed'
+                  : 'hover:bg-muted/50'
               }`}
-              aria-label={`Go to project ${index + 1}`}
-            />
-          ))}
+              aria-label="Previous project"
+            >
+              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
+            </button>
+            <button
+              onClick={() => {
+                if (carouselRef.current && activeIndex < projects.length - 1) {
+                  const cardWidth = carouselRef.current.offsetWidth * 0.85;
+                  carouselRef.current.scrollTo({
+                    left: cardWidth * (activeIndex + 1),
+                    behavior: 'smooth',
+                  });
+                }
+              }}
+              disabled={activeIndex === projects.length - 1}
+              className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-border/50 flex items-center justify-center transition-colors ${
+                activeIndex === projects.length - 1
+                  ? 'opacity-40 cursor-not-allowed'
+                  : 'hover:bg-muted/50'
+              }`}
+              aria-label="Next project"
+            >
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
+            </button>
+          </div>
         </div>
 
         {/* View All Projects Button (visible below carousel) */}
