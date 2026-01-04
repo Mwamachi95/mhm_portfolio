@@ -11,6 +11,14 @@ interface LogoProps {
 
 const Logo = ({ color, onClick }: LogoProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   return (
     <Link href="/" onClick={onClick}>
@@ -22,8 +30,8 @@ const Logo = ({ color, onClick }: LogoProps) => {
         <motion.svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 612 237.59"
-          className="w-16 sm:w-20 md:w-24 h-auto"
-          animate={{ y: isHovered ? -8 : 0 }}
+          className="w-12 sm:w-20 md:w-24 h-auto"
+          animate={{ y: isHovered ? (isMobile ? -10 : -15) : 0 }}
           transition={{
             duration: 0.4,
             ease: [0.25, 0.46, 0.45, 0.94],
@@ -46,14 +54,14 @@ const Logo = ({ color, onClick }: LogoProps) => {
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{
-              y: isHovered ? 0 : 20,
+              y: isHovered ? (isMobile ? -3 : -5) : 20,
               opacity: isHovered ? 1 : 0,
             }}
             transition={{
               duration: 0.4,
               ease: [0.25, 0.46, 0.45, 0.94],
             }}
-            className="text-xs sm:text-sm font-bold whitespace-nowrap lowercase"
+            className="text-[10px] sm:text-sm font-bold whitespace-nowrap lowercase"
             style={{ letterSpacing: '0.26em', color, transition: 'color 0.3s ease' }}
           >
             Mwamachi
@@ -160,7 +168,13 @@ export function Navbar() {
   return (
     <>
       {/* Main Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-[60] px-6 py-4 sm:px-8 sm:py-5 md:px-12 md:py-6 lg:px-16">
+      <nav
+        className={`fixed z-[60] transition-all duration-300 ease-out ${
+          isMenuOpen || isNavOverFooter
+            ? 'top-0 left-0 right-0 px-6 py-4 sm:px-8 sm:py-5 md:px-12 md:py-6 lg:px-16'
+            : 'top-3 left-3 right-3 sm:top-4 sm:left-4 sm:right-4 md:top-5 md:left-6 md:right-6 lg:top-6 lg:left-8 lg:right-8 px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-5 lg:px-10 rounded-2xl sm:rounded-3xl bg-background/70 backdrop-blur-md border border-primary/10 shadow-lg shadow-primary/5'
+        }`}
+      >
         <div className="flex items-center justify-between">
           <Logo color={navColor} onClick={() => setIsMenuOpen(false)} />
 
@@ -245,7 +259,11 @@ export function Navbar() {
       {/* About Link - Fixed Bottom Right */}
       <Link
         href="/about"
-        className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 md:bottom-10 md:right-12 lg:right-16 z-50 font-body text-base sm:text-lg hover:opacity-80"
+        className={`fixed z-50 font-body text-base sm:text-lg hover:opacity-80 transition-all duration-300 ease-out ${
+          isMenuOpen || isAboutOverFooter
+            ? 'bottom-6 right-6 sm:bottom-8 sm:right-8 md:bottom-10 md:right-12 lg:right-16'
+            : 'bottom-3 right-3 sm:bottom-4 sm:right-4 md:bottom-5 md:right-6 lg:bottom-6 lg:right-10 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-2xl bg-background/70 backdrop-blur-md border border-primary/10 shadow-lg shadow-primary/5'
+        }`}
         style={{ color: aboutColor, transition: 'color 0.3s ease, opacity 0.3s ease' }}
         onClick={() => setIsMenuOpen(false)}
       >
