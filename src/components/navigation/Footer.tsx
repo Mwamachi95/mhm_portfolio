@@ -53,6 +53,14 @@ export function Footer() {
                 >
                   LinkedIn
                 </a>
+                <a
+                  href="https://github.com/Mwamachi95"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link-underline font-body text-dark-fg text-base sm:text-lg md:text-xl lg:text-2xl font-normal"
+                >
+                  Github
+                </a>
               </div>
             </div>
           </div>
